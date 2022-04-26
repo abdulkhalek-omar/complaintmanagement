@@ -1,0 +1,38 @@
+Installation steps
+
+-- Clone Project from Github
+1. join project https://github.com/omarabdulkhalekFHDW/complaintmanagement/invitations
+1. see Github
+
+
+-- install composer
+1. open Git Bash ("in File complaintmanagement")
+2. composer install
+3. npm install
+4. npm run dev
+5. cp .env.example .env
+6. php artisan key:generate
+
+
+-- To install Vue.js
+1. composer require laravel/ui
+2. php artisan ui vue
+
+-- To install npm
+1. npm install
+2. npm run dev
+
+-- If you have problem to run $ npm run dev
+1. npm update vue-loader
+
+-- To install Vuetify
+1. npm i vuetify
+
+
+
+-- If File not ignored (example)
+Run git rm -r --cached vendor
+Run git add .
+Run git commit -m "Vendor files ignored."
+
+
