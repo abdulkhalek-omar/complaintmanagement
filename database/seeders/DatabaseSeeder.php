@@ -2,7 +2,14 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\AnsweredTicket;
+use App\Models\Client;
+use App\Models\Complaint;
+use App\Models\Department;
+use App\Models\Employee;
+use App\Models\Keyword;
+use App\Models\State;
+use App\Models\Ticket;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +21,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        State::factory(50)->create();
+        Department::factory(50)->create();
+        Keyword::factory(50)->create();
+        Complaint::factory(50)->create();
+        Employee::factory(50)->create();
+        Client::factory(50)->create();
+        Ticket::factory(50)->create();
+        AnsweredTicket::factory(50)->create();
     }
 }

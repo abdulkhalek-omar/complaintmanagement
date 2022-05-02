@@ -1,0 +1,51 @@
+Installation steps
+
+-- Clone Project from Github
+1. join project https://github.com/omarabdulkhalekFHDW/complaintmanagement/invitations
+1. see Github
+
+
+-- install composer (with npm)
+1. open Git Bash ("in File complaintmanagement")
+2. composer install
+3. npm install
+4. npm run dev
+5. cp .env.example .env
+6. php artisan key:generate
+
+
+-- DB set up
+1. run command in File "database/DbCommands.sql" to create The DB
+2. set your config for DB connection, in phpStorm -> Top right: Database - + - MariaDB
+3. set your config in ".env"
+4. run command: php artisan migrate -> this will create the Tables in DB
+
+-- To install Vue.js
+1. composer require laravel/ui
+2. php artisan ui vue
+
+-- To install npm
+1. npm install
+2. npm run dev
+
+-- If you have problem to run $ npm run dev
+1. npm update vue-loader
+
+-- To install Vuetify
+1. npm i vuetify
+
+-- install Fontawesome
+  https://fontawesome.com/download
+    - in public/fonts/css => all.min.css
+    - in public/fonts => webfonts
+
+-- Clear Laravel Setups
+    - php artisan cache:clear
+    - php artisan config:clear
+
+-- If File not ignored (example)
+Run git rm -r --cached vendor
+Run git add .
+Run git commit -m "Vendor files ignored."
+
+
