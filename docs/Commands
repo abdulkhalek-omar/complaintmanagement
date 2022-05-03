@@ -20,6 +20,11 @@ Installation steps
 3. set your config in ".env"
 4. run command: php artisan migrate -> this will create the Tables in DB
 
+
+-- install Laravel Sanctum
+1. composer require laravel/sanctum
+2. php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
 -- To install Vue.js
 1. composer require laravel/ui
 2. php artisan ui vue
@@ -42,6 +47,8 @@ Installation steps
 -- Clear Laravel Setups
     - php artisan cache:clear
     - php artisan config:clear
+    - composer dump-autoload -o
+    - composer update
 
 -- If File not ignored (example)
 Run git rm -r --cached vendor
