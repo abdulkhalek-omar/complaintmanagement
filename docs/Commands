@@ -25,6 +25,11 @@ Installation steps
 1. composer require laravel/sanctum
 2. php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 
+-- Install Bootstrap
+1. composer require laravel/ui
+2. php artisan ui bootstrap
+
+
 -- To install Vue.js
 1. composer require laravel/ui
 2. php artisan ui vue
