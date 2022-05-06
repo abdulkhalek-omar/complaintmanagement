@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
-class UpdateUserProfileLoginInformation implements UpdatesUserProfileInformation
+class UpdateUserProfileLoginInformation //implements UpdatesUserProfileInformation
 {
     /**
      * Validate and update the given user's profile information.

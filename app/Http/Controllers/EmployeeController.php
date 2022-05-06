@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use Illuminate\Http\Request;
+use App\Http\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
