@@ -13,7 +13,7 @@ class Ticket extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'fk_client_id',
+        'fk_customer_id',
         'fk_keyword_id',
         'fk_complaint_id',
         'closed',
