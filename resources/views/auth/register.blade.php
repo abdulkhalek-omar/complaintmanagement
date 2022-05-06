@@ -11,11 +11,11 @@
                 @csrf
 
                 <div class="mb-3">
-                    <x-jet-label value="{{ __('Name') }}" />
+                    <x-jet-label value="{{ __('Username') }}" />
 
-                    <x-jet-input class="{{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name"
-                                 :value="old('name')" required autofocus autocomplete="name" />
-                    <x-jet-input-error for="name"></x-jet-input-error>
+                    <x-jet-input class="{{ $errors->has('username') ? 'is-invalid' : '' }}" type="text" name="username"
+                                 :value="old('username')" required autofocus autocomplete="username" />
+                    <x-jet-input-error for="username"></x-jet-input-error>
                 </div>
 
                 <div class="mb-3">
