@@ -26,9 +26,10 @@ class Employee extends Model
         'is_admin'
     ];
 
-    protected $hidden = [
-        'password'
-    ];
+//
+//    protected $hidden = [
+//        'password'
+//    ];
 
     protected $with = ['state', 'department'];
 
