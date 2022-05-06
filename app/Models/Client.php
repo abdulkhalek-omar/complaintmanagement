@@ -13,6 +13,7 @@ class Client extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'fk_user_id',
         'forename',
         'surname',
         'phone_nr',
@@ -22,7 +23,12 @@ class Client extends Model
         'is_active'
     ];
 
-    protected $with = ['state'];
+    protected $with = ['user', 'state'];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'fk_user_id');
+    }
 
     public function state()
     {

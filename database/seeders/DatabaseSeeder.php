@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         Department::factory(50)->create();
         Keyword::factory(50)->create();
         Complaint::factory(50)->create();
-        User::factory(50)->create();
+        User::factory(500)->create();
         Employee::factory(50)->create();
         Client::factory(50)->create();
         Ticket::factory(50)->create();

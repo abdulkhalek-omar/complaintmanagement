@@ -13,6 +13,7 @@ class Employee extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'fk_user_id',
         'forename',
         'surname',
         'phone_nr',
@@ -24,7 +25,12 @@ class Employee extends Model
         'is_admin'
     ];
 
-    protected $with = ['state', 'department'];
+    protected $with = ['user', 'state', 'department'];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'fk_user_id');
+    }
 
     public function state()
     {
