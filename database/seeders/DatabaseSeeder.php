@@ -22,14 +22,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        State::factory(50)->create();
-        Department::factory(50)->create();
-        Keyword::factory(50)->create();
-        Complaint::factory(50)->create();
-        User::factory(500)->create();
-        Employee::factory(50)->create();
-        Client::factory(50)->create();
-        Ticket::factory(50)->create();
-        AnsweredTicket::factory(50)->create();
+
+        // Roles and Permissions
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            PermissionRoleSeeder::class,
+            UserSeeder::class,
+            RoleUserSeeder::class,
+        ]);
+
+
+        // general Fake Data
+//        State::factory(50)->create();
+//        Department::factory(50)->create();
+//        Keyword::factory(50)->create();
+//        Complaint::factory(50)->create();
+//        User::factory(500)->create();
+//        Employee::factory(50)->create();
+//        Client::factory(50)->create();
+//        Ticket::factory(50)->create();
+//        AnsweredTicket::factory(50)->create();
     }
 }
