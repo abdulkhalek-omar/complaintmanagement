@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Http\Models\AnsweredTicket;
-use App\Http\Models\Client;
-use App\Http\Models\Complaint;
-use App\Http\Models\Department;
-use App\Http\Models\Employee;
-use App\Http\Models\Keyword;
-use App\Http\Models\State;
-use App\Http\Models\Ticket;
-use App\Http\Models\User;
+use App\Models\AnsweredTicket;
+use App\Models\Client;
+use App\Models\Complaint;
+use App\Models\Department;
+use App\Models\Employee;
+use App\Models\Keyword;
+use App\Models\State;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

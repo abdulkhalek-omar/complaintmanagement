@@ -29,6 +29,20 @@
                 <x-jet-input-error for="surename" />
             </div>
 
+            <!-- Forename -->
+            <div class="mb-3">
+                <x-jet-label for="forename" value="{{ __('Forename') }}" />
+                <x-jet-input id="forename" type="text" class="{{ $errors->has('forename') ? 'is-invalid' : '' }}" wire:model.defer="state.forename" autocomplete="forename" />
+                <x-jet-input-error for="forename" />
+            </div>
+
+            <!-- Surname -->
+            <div class="mb-3">
+                <x-jet-label for="surename" value="{{ __('Surename') }}" />
+                <x-jet-input id="surename" type="text" class="{{ $errors->has('surename') ? 'is-invalid' : '' }}" wire:model.defer="state.surename" autocomplete="surename" />
+                <x-jet-input-error for="surename" />
+            </div>
+
 
         </div>
     </x-slot>

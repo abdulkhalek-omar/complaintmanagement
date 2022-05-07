@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Http\Models\Employee;
-use App\Http\Models\Ticket;
+use App\Models\Employee;
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

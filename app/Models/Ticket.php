@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Http\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Department extends Model
+class Ticket extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'fk_customer_id',
+        'fk_keyword_id',
+        'fk_complaint_id',
+        'closed',
+        'closed_at',
+        'created_at'
     ];
 }

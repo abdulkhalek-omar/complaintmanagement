@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Http\Models\Client;
-use App\Http\Models\Complaint;
-use App\Http\Models\Keyword;
+use App\Models\Client;
+use App\Models\Complaint;
+use App\Models\Keyword;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Http\Models\Ticket>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticket>
  */
 class TicketFactory extends Factory
 {
