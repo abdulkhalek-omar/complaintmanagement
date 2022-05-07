@@ -36,6 +36,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // to active => @can | Gate::denies('') | Gate::allows('')
+            \App\Http\Middleware\AuthGates::class,
         ],
 
         'api' => [

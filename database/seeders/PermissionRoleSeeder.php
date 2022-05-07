@@ -23,5 +23,15 @@ class PermissionRoleSeeder extends Seeder
             return substr($permission->title, 0, 5) != 'user_';
         });
         Role::findOrFail(2)->permissions()->sync($user_permissions);
+
+
+        /*
+        // Admin: User and Ticket access
+        Role::find(1)->permissions()->attach([1,2]);
+
+        // User: Only Ticket access
+        Role::find(2)->permissions()->attach([2]);
+
+        */
     }
 }

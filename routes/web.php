@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
 use App\Http\Livewire\UpdateProfileLoginInformationForm;
 use Illuminate\Support\Facades\Route;
 
@@ -22,13 +23,14 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->group(function () {
 
-        Route::get('/showUsers', [EmployeeController::class, 'showUsers']);
-        Route::get('/showUser', [EmployeeController::class, 'showUser']);
-
-        //Components
-
+//        Route::get('/showUsers', [EmployeeController::class, 'showUsers']);
+//        Route::get('/showUser', [EmployeeController::class, 'showUser']);
 
         Route::get('/dashboard', function () {
             return view('dashboard');
         })->name('dashboard');
     });
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('users', UserController::class);
+});
