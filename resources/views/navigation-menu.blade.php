@@ -23,6 +23,12 @@
                         {{ __('Users') }}
                     </x-jet-nav-link>
                 @endcan
+
+                @can('ticket_access')
+                    <x-jet-nav-link href="{{ route('tickets.index') }}" :active="request()->routeIs('tickets.*')">
+                        {{ __('Tickets') }}
+                    </x-jet-nav-link>
+                @endcan
             </ul>
 
             <!-- Right Side Of Navbar -->
