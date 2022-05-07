@@ -5,59 +5,61 @@
         </h2>
     </x-slot>
 
-    <div>
-        <div class="">
-            <a href="{{ route('users.index') }}" class="">Back to list</a>
+    <div class="container bg-white pt-3 pb-3 mt-3 mb-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle bg-white table-bordered">
+                        <tr class="bg-light">
+                            <th scope="col">
+                                ID
+                            </th>
+                            <td>
+                                {{ $user->id }}
+                            </td>
+                        </tr>
+                        <tr class="border-b">
+                            <th scope="col">
+                                Username
+                            </th>
+                            <td class="">
+                                {{ $user->username }}
+                            </td>
+                        </tr>
+                        <tr class="border-b">
+                            <th scope="col">
+                                Email
+                            </th>
+                            <td class="">
+                                {{ $user->email }}
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <th scope="col">
+                                Email Verified At
+                            </th>
+                            <td>
+                                {{ $user->email_verified_at }}
+                            </td>
+                        </tr>
+                        <tr class="border-b">
+                            <th scope="col">
+                                Roles
+                            </th>
+                            <td class="">
+                                @foreach ($user->roles as $role)
+                                    <span>{{ $role->title }}</span>
+                                @endforeach
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
-
-        <table class="">
-            <tr class="">
-                <th scope="col" class="">
-                    ID
-                </th>
-                <td class="">
-                    {{ $user->id }}
-                </td>
-            </tr>
-            <tr class="border-b">
-                <th scope="col" class="">
-                    Username
-                </th>
-                <td class="">
-                    {{ $user->username }}
-                </td>
-            </tr>
-            <tr class="border-b">
-                <th scope="col" class="">
-                    Email
-                </th>
-                <td class="">
-                    {{ $user->email }}
-                </td>
-            </tr>
-            <tr class="">
-                <th scope="col" class="">
-                    Email Verified At
-                </th>
-                <td class="">
-                    {{ $user->email_verified_at }}
-                </td>
-            </tr>
-            <tr class="border-b">
-                <th scope="col" class="">
-                    Roles
-                </th>
-                <td class="">
-                    @foreach ($user->roles as $role)
-                        <span class="">{{ $role->title }}</span>
-                    @endforeach
-                </td>
-            </tr>
-        </table>
     </div>
 
-    <div class="">
-        <a href="{{ route('users.index') }}" class="">Back to list</a>
+    <div>
+        <a href="{{ route('users.index') }}" class="btn btn-outline-info btn-sm">Back to list</a>
     </div>
 
 </x-app-layout>
