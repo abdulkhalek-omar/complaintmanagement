@@ -12,14 +12,6 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-    <!--  CoreUI Styles  -->
-    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.1.1/dist/css/coreui.min.css" rel="stylesheet"
-          integrity="sha384-4RjTy+ihDlYQqAQJodVMv1QuiX0mRlR0xtuKKu1P8I2TxVdGPXaW+VxJ6PirwMm4" crossorigin="anonymous">
-    <!-- CoreUI Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.1.1/dist/js/coreui.bundle.min.js"
-            integrity="sha384-PXOm0LjM7kBY7at2HNqu2pAJsTVQUPRzpJSwQD0V//zsjFAcv61qjiZj3ELesLb1"
-            crossorigin="anonymous"></script>
     @livewireStyles
 
     <!-- Scripts -->

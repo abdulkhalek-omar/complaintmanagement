@@ -38,6 +38,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // to active => @can | Gate::denies('') | Gate::allows('')
             \App\Http\Middleware\AuthGates::class,
+            // to active multi-languages And Localization
+            \App\Http\Middleware\Language::class,
         ],
 
         'api' => [
