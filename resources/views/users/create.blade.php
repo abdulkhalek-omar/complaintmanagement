@@ -1,62 +1,67 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create User
+        <h2 class="">
+            {{ __('Create User') }}
         </h2>
     </x-slot>
 
     <div>
-        <div class="max-w-4xl mx-auto py-10 sm:px-6 lg:px-8">
-            <div class="mt-5 md:mt-0 md:col-span-2">
-                <form method="post" action="{{ route('users.store') }}">
-                    @csrf
-                    <div class="shadow overflow-hidden sm:rounded-md">
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <label for="username" class="block font-medium text-sm text-gray-700">Username</label>
-                            <input type="text" name="username" id="username" class="form-input rounded-md shadow-sm mt-1 block w-full"
-                                   value="{{ old('username', '') }}" />
-                            @error('username')
-                                <p class="text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <form method="post" action="{{ route('users.store') }}">
+            @csrf
+            <div class="row g-3">
 
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <label for="email" class="block font-medium text-sm text-gray-700">Email</label>
-                            <input type="email" name="email" id="email" class="form-input rounded-md shadow-sm mt-1 block w-full"
-                                   value="{{ old('email', '') }}" />
-                            @error('email')
-                                <p class="text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                <div class="col-sm-12">
+                    <label for="username" class="form-label">{{ __('Username') }}</label>
+                    <input type="text" name="username" id="username" class="form-control"
+                           value="{{ old('username', '') }}"/>
+                    @error('username')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <label for="password" class="block font-medium text-sm text-gray-700">Password</label>
-                            <input type="password" name="password" id="password" class="form-input rounded-md shadow-sm mt-1 block w-full" />
-                            @error('password')
-                                <p class="text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
 
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <label for="roles" class="block font-medium text-sm text-gray-700">Roles</label>
-                            <select name="roles[]" id="roles" class="form-multiselect block rounded-md shadow-sm mt-1 block w-full" multiple="multiple">
-                                @foreach($roles as $id => $role)
-                                    <option value="{{ $id }}"{{ in_array($id, old('roles', [])) ? ' selected' : '' }}>{{ $role }}</option>
-                                @endforeach
-                            </select>
-                            @error('roles')
-                                <p class="text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                <div class="col-sm-12">
+                    <label for="email" class="form-label">{{ __('Email') }}</label>
+                    <input type="email" name="email" id="email" class="form-control"
+                           value="{{ old('email', '') }}"/>
+                    @error('email')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                        <div class="flex items-center justify-end px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                                Create
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <div class="col-sm-12">
+                    <label for="password" class="form-label">{{ __('Password') }}</label>
+                    <input type="password" name="password" id="password" class="form-control"/>
+                    @error('password')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="col-sm-12">
+                    <label for="roles" class="text-muted">{{ __('Roles') }}</label>
+                    <select name="roles[]" id="roles" class="form-control" multiple="multiple">
+                        @foreach($roles as $id => $role)
+                            <option
+                                value="{{ $id }}"{{ in_array($id, old('roles', [])) ? ' selected' : '' }}>{{ $role }}</option>
+                        @endforeach
+                    </select>
+                    @error('roles')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="">
+                    <button class="btn btn-outline-secondary btn-lg">
+                        {{ __('Create') }}
+                    </button>
+                </div>
+
+                <div class="">
+                    <a href="{{ route('users.index') }}" class="">Back to list</a>
+                </div>
+
             </div>
-        </div>
+        </form>
     </div>
+
 </x-app-layout>
