@@ -16,7 +16,7 @@ class AuthGates
          * if user logged-in
          * you got the roles
          * and foreach of the permissions of all those roles
-         * than define, if user_access or ticket_access (both)
+         * than define, if user_access or employee_access or admin_access
          * => return ture or false, depending on the role has that access or not
          *
         */

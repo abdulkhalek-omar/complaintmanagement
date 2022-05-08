@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\State>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Place>
  */
-class StateFactory extends Factory
+class PlaceFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class StateFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->locale
+            'name' => $this->faker->unique()->city,
+            'postcode' => $this->faker->postcode
         ];
     }
 }

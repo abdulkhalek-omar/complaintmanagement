@@ -25,6 +25,13 @@ class UserSeeder extends Seeder
             ],
             [
                 'id'             => 2,
+                'username'       => 'Employee',
+                'email'          => 'employee@employee.com',
+                'password'       => bcrypt('password'),
+                'remember_token' => null,
+            ],
+            [
+                'id'             => 3,
                 'username'       => 'User',
                 'email'          => 'user@user.com',
                 'password'       => bcrypt('password'),

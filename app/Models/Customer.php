@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model
+class Customer extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,6 @@ class Employee extends Model
     ];
 
     protected $with = ['user', 'place', 'state', 'country'];
-
 
     public function user()
     {
@@ -44,4 +43,6 @@ class Employee extends Model
     {
         return $this->belongsTo(Country::class, 'fk_country_id', 'id');
     }
+
+
 }

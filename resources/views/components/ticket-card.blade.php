@@ -17,7 +17,7 @@ if (!$card->closed){
     <div class="card {{$card_color}}">
         <div class="card-body d-flex flex-column">
             <h5 class="card-title">Erstellt von: {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>
-            <p class="card-text mb-4">{!! $card->complaint->content !!}</p>
+            <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
             <a href="#" class="{{$btn_color . ' mt-auto align-self-start'}}">{{ $btn_text }}</a>
         </div>
         <div class="card-footer {{$footer_color}}">

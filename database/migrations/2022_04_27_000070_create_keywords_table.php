@@ -12,12 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('keywords', function (Blueprint $table) {
             $table->id();
-            $table->string('state')->nullable();
-            $table->string('postcode', 10)->nullable();
-            $table->string('country')->nullable();
-            $table->unique(['state', 'postcode']);
+            $table->string('keyword')->unique();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('keywords');
     }
 };

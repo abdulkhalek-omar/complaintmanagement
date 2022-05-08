@@ -12,8 +12,6 @@ class State extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'state',
-        'postcode',
-        'country',
+        'name'
     ];
 }

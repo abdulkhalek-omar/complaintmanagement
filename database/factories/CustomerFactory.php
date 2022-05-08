@@ -7,8 +7,7 @@ use App\Models\Place;
 use App\Models\State;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
-class EmployeeFactory extends Factory
+class CustomerFactory extends Factory
 {
     /**
      * Define the model's default state.

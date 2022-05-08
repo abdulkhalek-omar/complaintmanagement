@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CustomerManagementController;
 use App\Http\Controllers\UserController;
-use App\Http\Livewire\UpdateProfileLoginInformationForm;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,5 +34,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
-    Route::resource('tickets', TicketController::class);
+    Route::resource('tickets', CustomerManagementController::class);
 });

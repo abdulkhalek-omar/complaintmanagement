@@ -15,11 +15,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fk_client_id')->references('id')->on('clients')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_keyword_id')->nullable()->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_complaint_id')->nullable()->references('id')->on('complaints')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('closed')->default(0)->comment('0 -> open; 1 -> closed');
-            $table->timestamp('closed_at')->useCurrent();
+            $table->text('content');
             $table->timestamp('created_at')->useCurrent();
         });
     }

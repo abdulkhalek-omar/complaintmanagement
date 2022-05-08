@@ -18,17 +18,18 @@
                     {{ __('Dashboard') }}
                 </x-jet-nav-link>
 
-                @can('user_access')
+                @can('admin_access')
                     <x-jet-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
                         {{ __('Users') }}
                     </x-jet-nav-link>
                 @endcan
 
-                @can('ticket_access')
+                @can('employee_access')
                     <x-jet-nav-link href="{{ route('tickets.index') }}" :active="request()->routeIs('tickets.*')">
                         {{ __('Tickets') }}
                     </x-jet-nav-link>
                 @endcan
+
             </ul>
 
             <!-- Right Side Of Navbar -->

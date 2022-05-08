@@ -4,9 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Keyword>
- */
+
 class KeywordFactory extends Factory
 {
     /**
@@ -17,7 +15,7 @@ class KeywordFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name
+            'keyword' => $this->faker->unique()->word
         ];
     }
 }

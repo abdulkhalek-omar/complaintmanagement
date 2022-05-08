@@ -17,21 +17,29 @@ class PermissionRoleSeeder extends Seeder
     public function run()
     {
         // Assoziationen synchronisieren: Many-to-Many-Assoziationen
-        $admin_permissions = Permission::all();
-        Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
-        $user_permissions = $admin_permissions->filter(function ($permission) {
-            return substr($permission->title, 0, 5) != 'user_';
-        });
-        Role::findOrFail(2)->permissions()->sync($user_permissions);
+//        $admin_permissions = Permission::all();
+//        Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
+//
+//
+//        $employee_permissions = $admin_permissions->filter(function ($permission) {
+//            return !str_starts_with($permission->title, 'employee_');
+//        });
+//        Role::findOrFail(2)->permissions()->sync($employee_permissions);
+//
+//        $user_permissions = $employee_permissions->filter(function ($permission) {
+//            return !str_starts_with($permission->title, 'user_');
+//        });
+//        Role::findOrFail(3)->permissions()->sync($user_permissions);
 
 
-        /*
-        // Admin: User and Ticket access
-        Role::find(1)->permissions()->attach([1,2]);
+        // Admin: Fully access
+        Role::find(1)->permissions()->attach([1,2,3]);
+
+        // Employee: User and Ticket access
+        Role::find(2)->permissions()->attach([2,3]);
 
         // User: Only Ticket access
-        Role::find(2)->permissions()->attach([2]);
+        Role::find(3)->permissions()->attach([3]);
 
-        */
     }
 }
