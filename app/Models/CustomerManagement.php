@@ -9,10 +9,17 @@ class CustomerManagement extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'customer_managements';
 
     protected $fillable = [
         'closed',
+    ];
+
+    protected $dates = [
+        'assignment_at',
+        'expiry_at',
     ];
 
     protected $with = ['ticket', 'customer', 'keyword', 'employee'];

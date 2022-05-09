@@ -14,12 +14,13 @@ return new class extends Migration {
     {
         Schema::create('customer_managements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fk_ticket_id')->nullable()->references('id')->on('tickets')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_customer_id')->nullable()->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_ticket_id')->references('id')->on('tickets')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_customer_id')->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('fk_employee_id')->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_keyword_id')->nullable()->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_keyword_id')->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('closed')->default(0);
-            $table->timestamps();
+            $table->timestamp('assignment_at')->nullable();
+            $table->timestamp('expiry_at')->nullable();
         });
     }
 
