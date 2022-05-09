@@ -10,10 +10,9 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'    => [
-                'string',
+            'username'    => [
                 'required',
-                'unique:users',
+                'unique:users,username,' . request()->route('user')->id,
             ],
             'email'   => [
                 'required',

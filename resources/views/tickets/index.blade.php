@@ -1,4 +1,5 @@
 <x-app-layout>
+
     <x-slot name="header">
         <h2 class="">
             {{ __('Tickets Management') }}
@@ -19,13 +20,10 @@
                         <x-ticket-card :card="$card"/>
                     @else
                         <x-ticket-card :card="$card"/>
-
                     @endif
                 @endforeach
-
             </div>
         </div>
     </section>
-
 
 </x-app-layout>
