@@ -5,13 +5,13 @@
         </h2>
     </x-slot>
 
-    <section class="container">
+    <section class="container  bg-white pt-3 pb-3">
         <div class="col-md-7 col-lg-8">
             <form method="POST" action="{{ route('tickets.store') }}">
                 @csrf
                 @method('POST')
 
-                <hr class="my-4">
+{{--                <hr class="my-4">--}}
 
                 <div class="col-md-4">
                     <label for="keyword" class="form-label">{{__('Keyword')}} <span class="text-muted">*</span></label>

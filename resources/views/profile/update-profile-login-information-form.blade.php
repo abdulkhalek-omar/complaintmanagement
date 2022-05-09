@@ -29,19 +29,19 @@
                 <x-jet-input-error for="surename" />
             </div>
 
-            <!-- Forename -->
+            <!-- Street -->
             <div class="mb-3">
-                <x-jet-label for="forename" value="{{ __('Forename') }}" />
-                <x-jet-input id="forename" type="text" class="{{ $errors->has('forename') ? 'is-invalid' : '' }}" wire:model.defer="state.forename" autocomplete="forename" />
-                <x-jet-input-error for="forename" />
+                <x-jet-label for="street" value="{{ __('Street') }}" />
+                <x-jet-input id="street" type="text" class="{{ $errors->has('street') ? 'is-invalid' : '' }}" wire:model.defer="state.street" autocomplete="street" />
+                <x-jet-input-error for="street" />
             </div>
 
-            <!-- Surname -->
-            <div class="mb-3">
-                <x-jet-label for="surename" value="{{ __('Surename') }}" />
-                <x-jet-input id="surename" type="text" class="{{ $errors->has('surename') ? 'is-invalid' : '' }}" wire:model.defer="state.surename" autocomplete="surename" />
-                <x-jet-input-error for="surename" />
-            </div>
+{{--            <!-- Surname -->--}}
+{{--            <div class="mb-3">--}}
+{{--                <x-jet-label for="surename" value="{{ __('Surename') }}" />--}}
+{{--                <x-jet-input id="surename" type="text" class="{{ $errors->has('surename') ? 'is-invalid' : '' }}" wire:model.defer="state.surename" autocomplete="surename" />--}}
+{{--                <x-jet-input-error for="surename" />--}}
+{{--            </div>--}}
 
 
         </div>
