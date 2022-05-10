@@ -19,7 +19,7 @@ class EmployeeManagementFactory extends Factory
         $employee_ids = Employee::all()->pluck('id');
         $department_ids = Department::all()->pluck('id');
         return [
-            'fk_employee_id' => $this->faker->randomElement($employee_ids),
+            'fk_employee_id' => $this->faker->unique()->randomElement($employee_ids),
             'fk_department_id' => $this->faker->randomElement($department_ids)
         ];
     }

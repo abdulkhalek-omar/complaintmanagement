@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Country;
 use App\Models\Place;
 use App\Models\State;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerFactory extends Factory
@@ -21,6 +22,7 @@ class CustomerFactory extends Factory
         $country_ids = Country::all()->pluck('id');
 
         return [
+            'fk_user_id' => User::factory(),
             'surname' => $this->faker->lastName,
             'firstname' => $this->faker->firstName,
             'phone_number' => $this->faker->phoneNumber,
