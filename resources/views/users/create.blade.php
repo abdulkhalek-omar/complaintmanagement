@@ -8,35 +8,38 @@
     <div class="container bg-white pt-3 pb-3">
         <div class="row">
             <div class="col-12">
+
+                <x-jet-validation-errors class="mb-3"/>
+
                 <form method="post" action="{{ route('users.store') }}">
                     @csrf
                     <div class="row g-3">
 
                         <div class="col-sm-12">
-                            <label for="username" class="form-label">{{ __('Username') }}</label>
-                            <input type="text" name="username" id="username" class="form-control"
-                                   value="{{ old('username', '') }}"/>
-                            @error('username')
-                            <p class="invalid-feedback">{{ $message }}</p>
-                            @enderror
+                            <x-jet-label value="{{ __('Username') }}"/>
+
+                            <x-jet-input class="{{ $errors->has('username') ? 'is-invalid' : '' }}" type="text"
+                                         name="username"
+                                         :value="old('username')" required autofocus autocomplete="username"/>
+                            <x-jet-input-error for="username"></x-jet-input-error>
                         </div>
 
 
                         <div class="col-sm-12">
-                            <label for="email" class="form-label">{{ __('Email') }}</label>
-                            <input type="email" name="email" id="email" class="form-control"
-                                   value="{{ old('email', '') }}"/>
-                            @error('email')
-                            <p class="invalid-feedback">{{ $message }}</p>
-                            @enderror
+                            <x-jet-label value="{{ __('Email') }}"/>
+
+                            <x-jet-input class="{{ $errors->has('email') ? 'is-invalid' : '' }}" type="email"
+                                         name="email"
+                                         :value="old('email')" required/>
+                            <x-jet-input-error for="email"></x-jet-input-error>
                         </div>
 
                         <div class="col-sm-12">
-                            <label for="password" class="form-label">{{ __('Password') }}</label>
-                            <input type="password" name="password" id="password" class="form-control"/>
-                            @error('password')
-                            <p class="invalid-feedback">{{ $message }}</p>
-                            @enderror
+                            <x-jet-label value="{{ __('Password') }}"/>
+
+                            <x-jet-input class="{{ $errors->has('password') ? 'is-invalid' : '' }}" type="password"
+                                         name="password" required autocomplete="new-password"/>
+                            <x-jet-input-error for="password"></x-jet-input-error>
                         </div>
 
                         <div class="col-sm-12">

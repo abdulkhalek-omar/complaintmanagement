@@ -13,29 +13,23 @@
                     @method('put')
                     <div class="row g-3">
                         <div class="col-sm-12">
-                            <label for="username" class="">Username</label>
+                            <label for="username" class="{{ $errors->has('username') ? 'is-invalid' : '' }}">Username</label>
                             <input type="text" name="username" id="username" class="form-control"
                                    value="{{ old('username', $user->username) }}"/>
-                            @error('username')
-                            <p class="">{{ $message }}</p>
-                            @enderror
+                            <x-jet-input-error for="username"></x-jet-input-error>
                         </div>
 
                         <div class="col-sm-12">
-                            <label for="email" class="">Email</label>
+                            <label for="email" class="{{ $errors->has('email') ? 'is-invalid' : '' }}">Email</label>
                             <input type="email" name="email" id="email" class="form-control"
                                    value="{{ old('email', $user->email) }}"/>
-                            @error('email')
-                            <p class="">{{ $message }}</p>
-                            @enderror
+                            <x-jet-input-error for="email"></x-jet-input-error>
                         </div>
 
                         <div class="col-sm-12">
-                            <label for="password" class="">Password</label>
+                            <label for="password" class="{{ $errors->has('password') ? 'is-invalid' : '' }}">Password</label>
                             <input type="password" name="password" id="password" class="form-control"/>
-                            @error('password')
-                            <p class="">{{ $message }}</p>
-                            @enderror
+                            <x-jet-input-error for="password"></x-jet-input-error>
                         </div>
 
                         <div class="col-sm-12">

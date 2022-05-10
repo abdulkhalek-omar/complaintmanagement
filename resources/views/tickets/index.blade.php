@@ -11,8 +11,9 @@
         {{ __('Submit a Complaint') }}
     </a>
 
-    <section class="bg-light shadow-sm">
 
+
+    <section class="bg-light shadow-sm">
         <div class="container">
             <div class="row">
                 @foreach($cards as $card)
