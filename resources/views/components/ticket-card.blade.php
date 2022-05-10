@@ -13,7 +13,7 @@ if (!$card->closed){
 }
 @endphp
 
-<div class="col-lg-4 mb-3 d-flex align-items-stretch">
+<div class="col-lg-4 mb-5 d-flex align-items-stretch">
     <div class="card {{$card_color}}">
         <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{__('Created by')}}
