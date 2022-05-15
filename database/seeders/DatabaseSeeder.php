@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             PermissionRoleSeeder::class,
             UserSeeder::class,
             RoleUserSeeder::class,
+            Keyword::class,
         ]);
 
 

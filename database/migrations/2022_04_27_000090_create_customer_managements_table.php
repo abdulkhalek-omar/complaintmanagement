@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->foreignId('fk_customer_id')->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('fk_employee_id')->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('fk_keyword_id')->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('closed')->default(0);
+            $table->boolean('closed')->default(0)->comment('0 => Ticket Open, 1 Ticket closed');
             $table->timestamp('assignment_at')->nullable();
             $table->timestamp('expiry_at')->nullable();
         });

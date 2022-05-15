@@ -14,6 +14,12 @@ class CustomerManagement extends Model
     protected $table = 'customer_managements';
 
     protected $fillable = [
+        'fk_ticket_id',
+        'fk_customer_id',
+        'fk_employee_id',
+        'fk_keyword_id',
+        'assignment_at',
+        'expiry_at',
         'closed',
     ];
 

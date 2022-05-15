@@ -24,7 +24,7 @@
                     </x-jet-nav-link>
                 @endcan
 
-                @can('employee_access')
+                @can('user_access')
                     <x-jet-nav-link href="{{ route('tickets.index') }}" :active="request()->routeIs('tickets.*')">
                         {{ __('Tickets') }}
                     </x-jet-nav-link>
