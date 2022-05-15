@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Customer extends Model
 {
@@ -22,6 +23,12 @@ class Customer extends Model
         'firstname',
         'phone_number',
     ];
+
+
+    public static function getCustomerId()
+    {
+        return Customer::select('customers.id')->where('customers.fk_user_id', Auth::user()->id)->first()->id;
+    }
 
     //protected $with = ['user', 'place', 'state', 'country'];
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
+use App\Models\Customer;
 use App\Models\CustomerManagement;
 use App\Models\Keyword;
 use App\Models\Ticket;
@@ -24,7 +25,7 @@ class CustomerManagementController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('tickets.index', [
-            'cards' => CustomerManagement::all()->sortByDesc('closed')
+            'cards' => CustomerManagement::all()->sortBy('closed')
         ]);
     }
 
@@ -108,7 +109,6 @@ class CustomerManagementController extends Controller
                 ->groupBy('fk_employee_id')
                 ->orderBy('numberOfOpenTickets', 'ASC')
                 ->first();
-
         return $employee->fk_employee_id;
     }
 
@@ -123,10 +123,10 @@ class CustomerManagementController extends Controller
 
         CustomerManagement::create([
             'fk_ticket_id' => $ticket->id,
-            'fk_customer_id' => Auth::user()->id,
+            'fk_customer_id' => Customer::getCustomerId(),
             'fk_employee_id' => $this->getEmployeeWithoutLast(),
             'fk_keyword_id' => $request->input('id'),
-            'closed' => 1,
+            'closed' => 0,
             'assignment_at' => $time->format('Y-m-d H:i:s'),
             'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
         ]);

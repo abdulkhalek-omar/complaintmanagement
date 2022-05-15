@@ -5,7 +5,7 @@
     $btn_color                = "btn btn-secondary";
     $footer_color             = "text-muted";
     $btn_text                 = "Close Ticket";
-if (!$card->closed){
+if ($card->closed){
     $card_color               = "text-white bg-success";
     $btn_color                = "btn btn-dark";
     $footer_color             = "text-white";
