@@ -55,8 +55,8 @@
                             @enderror
                         </div>
 
-                        <div class="">
-                            <button class="btn btn-outline-secondary btn-lg">
+                        <div class="col-sm-12">
+                            <button class="btn-outline-secondary form-control">
                                 {{ __('Create') }}
                             </button>
                         </div>

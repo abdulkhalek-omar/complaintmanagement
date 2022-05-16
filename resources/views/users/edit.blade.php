@@ -56,7 +56,7 @@
 
                         <div class="col-sm-12">
                             <button class="btn-outline-secondary form-control">
-                                Edit
+                                {{ __('Edit') }}
                             </button>
                         </div>
 

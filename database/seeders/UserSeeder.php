@@ -22,6 +22,8 @@ class UserSeeder extends Seeder
                 'email'          => 'admin@admin.com',
                 'password'       => bcrypt('password'),
                 'remember_token' => null,
+                'created_at'     => '2022-05-16 02:33:05',
+                'updated_at'     => '2022-05-16 02:33:05',
             ],
             [
                 'id'             => 2,
@@ -29,6 +31,8 @@ class UserSeeder extends Seeder
                 'email'          => 'employee@employee.com',
                 'password'       => bcrypt('password'),
                 'remember_token' => null,
+                'created_at'     => '2022-05-16 02:33:05',
+                'updated_at'     => '2022-05-16 02:33:05',
             ],
             [
                 'id'             => 3,
@@ -36,6 +40,8 @@ class UserSeeder extends Seeder
                 'email'          => 'user@user.com',
                 'password'       => bcrypt('password'),
                 'remember_token' => null,
+                'created_at'     => '2022-05-16 02:33:05',
+                'updated_at'     => '2022-05-16 02:33:05',
             ],
         ];
 

@@ -39,7 +39,7 @@
                                 Email Verified At
                             </th>
                             <td>
-                                {{ $user->email_verified_at }}
+                                {{ $user->email_verified_at }} => {{ $user->email_verified_at->diffForHumans() }}
                             </td>
                         </tr>
                         <tr class="border-b">
@@ -50,6 +50,14 @@
                                 @foreach ($user->roles as $role)
                                     <span>{{ $role->title }}</span>
                                 @endforeach
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <th scope="col">
+                                User has registered at
+                            </th>
+                            <td>
+                                {{ $user->created_at }} => {{ $user->created_at->diffForHumans() }}
                             </td>
                         </tr>
                     </table>
