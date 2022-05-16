@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->foreignId('fk_employee_id')->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('fk_department_id')->references('id')->on('departments')->cascadeOnDelete()->cascadeOnUpdate();
             $table->unique(['fk_department_id', 'fk_employee_id']);
-            $table->timestamps();
         });
     }
 

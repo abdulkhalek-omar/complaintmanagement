@@ -13,7 +13,6 @@ use App\Models\ManagementHierarchie;
 use App\Models\Place;
 use App\Models\State;
 use App\Models\Ticket;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +25,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        // Address Fake Data
+        Place::factory(50)->create();
+        State::factory(50)->create();
+        Country::factory(50)->create();
+
         // Roles and Permissions
         $this->call([
             PermissionSeeder::class,
@@ -33,14 +37,13 @@ class DatabaseSeeder extends Seeder
             PermissionRoleSeeder::class,
             UserSeeder::class,
             RoleUserSeeder::class,
-            Keyword::class,
+            KeywordSeeder::class,
+            CustomerSeeder::class,
+            EmployeeSeeder::class,
         ]);
 
 
-        // general Fake Data
-        Place::factory(50)->create();
-        State::factory(50)->create();
-        Country::factory(50)->create();
+        // User Fake Data
         Customer::factory(50)->create();
         Ticket::factory(50)->create();
         Department::factory(50)->create();

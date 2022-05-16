@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Employee extends Model
 {
@@ -22,6 +23,12 @@ class Employee extends Model
         'firstname',
         'phone_number',
     ];
+
+    public static function getEmployeeId($user)
+    {
+        return Employee::select('employees.id')->where('employees.fk_user_id', $user->id)->first()->id;
+    }
+
 //
 //    protected $with = ['user', 'place', 'state', 'country'];
 //

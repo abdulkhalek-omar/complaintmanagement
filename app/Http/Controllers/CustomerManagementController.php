@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\Customer;
 use App\Models\CustomerManagement;
+use App\Models\Employee;
 use App\Models\Keyword;
 use App\Models\Ticket;
 use Carbon\Carbon;
@@ -24,8 +25,26 @@ class CustomerManagementController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $role = null;
+        $tickets = null;
+        $user = Auth::user();
+
+        foreach ($user->roles as $item) {
+            $role = $item['title'];
+        }
+
+        if (!strcmp($role, 'User')) {
+            $tickets = CustomerManagement::where('fk_customer_id', Customer::getCustomerId($user))->orderBy('closed')->get();
+        }
+        if (!strcmp($role, 'Employee')) {
+            $tickets = CustomerManagement::where('fk_employee_id', Employee::getEmployeeId($user))->orderBy('closed')->get();
+        }
+        if (!strcmp($role, 'Admin')) {
+            $tickets = CustomerManagement::all()->sortBy('closed');
+        }
+
         return view('tickets.index', [
-            'cards' => CustomerManagement::all()->sortBy('closed')
+            'cards' => $tickets,
         ]);
     }
 
@@ -43,7 +62,9 @@ class CustomerManagementController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        $this->assignTicketToEmployee($ticket, $request);
+        $user = Auth::user();
+
+        $this->assignTicketToEmployee($ticket, $request, $user);
 
         return redirect()->route('tickets.index');
     }
@@ -53,7 +74,7 @@ class CustomerManagementController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('tickets.create', [
-            'keywords' => Keyword::all(),
+            'keywords' => Keyword::all()->sortBy('id'),
         ]);
     }
 
@@ -117,13 +138,13 @@ class CustomerManagementController extends Controller
      * @param StoreTicketRequest $request
      * @return void
      */
-    private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
+    private function assignTicketToEmployee($ticket, StoreTicketRequest $request, $user): void
     {
         $time = Carbon::now();
 
         CustomerManagement::create([
             'fk_ticket_id' => $ticket->id,
-            'fk_customer_id' => Customer::getCustomerId(),
+            'fk_customer_id' => Customer::getCustomerId($user),
             'fk_employee_id' => $this->getEmployeeWithoutLast(),
             'fk_keyword_id' => $request->input('id'),
             'closed' => 0,

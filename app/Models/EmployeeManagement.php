@@ -11,9 +11,10 @@ class EmployeeManagement extends Model
 
     protected $table = 'employee_managements';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'fk_employee_id',
         'fk_department_id'
     ];
-    public $timestamps = false;
 }

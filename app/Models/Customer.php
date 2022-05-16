@@ -25,9 +25,9 @@ class Customer extends Model
     ];
 
 
-    public static function getCustomerId()
+    public static function getCustomerId($user)
     {
-        return Customer::select('customers.id')->where('customers.fk_user_id', Auth::user()->id)->first()->id;
+        return Customer::select('customers.id')->where('customers.fk_user_id', $user->id)->first()->id;
     }
 
     //protected $with = ['user', 'place', 'state', 'country'];

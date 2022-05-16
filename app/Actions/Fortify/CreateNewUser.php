@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -34,6 +35,10 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         User::findOrFail($user->id)->roles()->sync(3);
+
+        Customer::create([
+            'fk_user_id' => $user->id
+        ]);
 
         return $user;
     }

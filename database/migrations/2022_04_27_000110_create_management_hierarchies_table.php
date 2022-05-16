@@ -14,8 +14,10 @@ return new class extends Migration {
     {
         Schema::create('management_hierarchies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fk_employee_management_id')->references('id')->on('employee_managements')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_customer_management_id')->references('id')->on('customer_managements')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_employee_id')->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_customer_id')->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_ticket_id')->references('id')->on('tickets')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('closed')->default(0)->comment('0 => Ticket was not closed, 1 Ticket was closed');
             $table->boolean('replied')->default(0)->comment('0 => not replied; 1 => replied');
             $table->text('answer')->nullable();
             $table->timestamp('replied_at')->useCurrent();
