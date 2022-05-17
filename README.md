@@ -17,6 +17,7 @@
     - Laravel JetStream
     - Laravel Fortify
     - Bootstrap v5.0
+    - JavaScript
     - Fontawesome v5.15.4
 
 
