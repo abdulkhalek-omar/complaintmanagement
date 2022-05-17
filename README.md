@@ -14,7 +14,9 @@
 
 1. Frameworks:
     - Laravel 9.x
-    - vuetify v.2.6.4
+    - Laravel JetStream
+    - Laravel Fortify
+    - Bootstrap v5.0
     - Fontawesome v5.15.4
 
 
