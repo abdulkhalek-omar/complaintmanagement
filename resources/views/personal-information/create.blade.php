@@ -34,12 +34,12 @@
 
                         <!-- Forename -->
                         <div class="mb-3">
-                            <x-jet-label for="forename" value="{{ __('Forename') }}"/>
-                            <x-jet-input id="forename"
+                            <x-jet-label for="firstname" value="{{ __('Firstname') }}"/>
+                            <x-jet-input id="firstname"
                                          type="text"
-                                         class="{{ $errors->has('forename') ? 'is-invalid' : '' }}"
-                                         name="forename"
-                                         autocomplete="forename"
+                                         class="{{ $errors->has('firstname') ? 'is-invalid' : '' }}"
+                                         name="firstname"
+                                         autocomplete="firstname"
                                          value="{{$personalInfo->firstname}}"
                                          autofocus
                             />
@@ -48,16 +48,29 @@
 
                         <!-- Surname -->
                         <div class="mb-3">
-                            <x-jet-label for="surename" value="{{ __('Surename') }}"/>
-                            <x-jet-input id="surename"
+                            <x-jet-label for="surname" value="{{ __('Surname') }}"/>
+                            <x-jet-input id="surname"
                                          type="text"
-                                         class="{{ $errors->has('surename') ? 'is-invalid' : '' }}"
-                                         name="surename"
-                                         autocomplete="surename"
+                                         class="{{ $errors->has('surname') ? 'is-invalid' : '' }}"
+                                         name="surname"
+                                         autocomplete="surname"
                                          value="{{$personalInfo->surname}}"
                             />
-                            <x-jet-input-error for="surename"/>
+                            <x-jet-input-error for="surname"/>
                         </div>
+
+                        <!-- Phone Number -->
+{{--                        <div class="mb-3">--}}
+{{--                            <x-jet-label for="phone_number" value="{{ __('Phone Number') }}"/>--}}
+{{--                            <x-jet-input id="phone_number"--}}
+{{--                                         type="text"--}}
+{{--                                         class="{{ $errors->has('phone_number') ? 'is-invalid' : '' }}"--}}
+{{--                                         name="phone_number"--}}
+{{--                                         autocomplete="phone_number"--}}
+{{--                                         value="{{$personalInfo->phone_number}}"--}}
+{{--                            />--}}
+{{--                            <x-jet-input-error for="phone_number"/>--}}
+{{--                        </div>--}}
 
 
                         <!-- Street -->
@@ -75,8 +88,8 @@
 
                         <!-- Place -->
                         <div class="mb-3">
-                            <x-jet-label for="fk_place_id" value="{{ __('Place') }}"/>
-                            <select class="form-select" id="fk_place_id" name="fk_place_id">
+                            <x-jet-label for="place_id" value="{{ __('Place') }}"/>
+                            <select class="form-select" id="place_id" name="place_id">
                                 @foreach($places as $place)
                                     <option
                                         value="{{__($place->id)}}"
@@ -90,8 +103,8 @@
 
                         <!-- State -->
                         <div class="mb-3">
-                            <x-jet-label for="fk_state_id" value="{{ __('State') }}"/>
-                            <select class="form-select" id="fk_state_id" name="fk_state_id">
+                            <x-jet-label for="state_id" value="{{ __('State') }}"/>
+                            <select class="form-select" id="state_id" name="state_id">
                                 @foreach($states as $state)
                                     <option
                                         value="{{__($state->id)}}"
@@ -105,8 +118,8 @@
 
                         <!-- Country -->
                         <div class="mb-3">
-                            <x-jet-label for="fk_country_id" value="{{ __('Country') }}"/>
-                            <select class="form-select" id="fk_country_id" name="fk_country_id">
+                            <x-jet-label for="country_id" value="{{ __('Country') }}"/>
+                            <select class="form-select" id="country_id" name="country_id">
                                 @foreach($countries as $country)
                                     <option
                                         value="{{__($country->id)}}"

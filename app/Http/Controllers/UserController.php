@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -31,8 +33,22 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
+//        dd($request->roles[0] == 2);
+
         $user = User::create($request->validated());
         $user->roles()->sync($request->input('roles', []));
+
+        if ($request->roles[0] == 2) {
+            Employee::create([
+                'fk_user_id' => $user->id
+            ]);
+        }
+
+        if ($request->roles[0] == 3){
+            Customer::create([
+                'fk_user_id' => $user->id
+            ]);
+        }
 
         return redirect()->route('users.index');
     }

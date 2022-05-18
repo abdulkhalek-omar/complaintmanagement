@@ -31,8 +31,29 @@ class PersonalInformationController extends Controller
 
     public function store(StoreProfileRequest $request)
     {
-        dd($request);
-        Customer::updateOrCreate($request->validated());
+        $validated = $request->validated();
+//        dd($validated);
+
+        Customer::updateOrCreate([
+            'firstname' => $validated['firstname'],
+            'surname' => $validated['surname'],
+//            'phone_number' => $validated['phone_number'],
+            'street' => $validated['street'],
+            'fk_place_id' => $validated['place_id'],
+            'fk_state_id' => $validated['state_id'],
+            'fk_country_id' => $validated['country_id'],
+        ]);
+
+
+//        Customer::updateOrCreate([
+//            'firstname' =>  $request->input('firstname'),
+//            'surname' =>  $request->input('surname'),
+////            'phone_number' => $validated['phone_number'],
+//            'street' =>  $request->input('street'),
+//            'fk_place_id' =>  $request->input('place_id'),
+//            'fk_state_id' =>  $request->input('state_id'),
+//            'fk_country_id' =>  $request->input('country_id'),
+//        ]);
 
         return redirect()->route('personal-information.index');
     }

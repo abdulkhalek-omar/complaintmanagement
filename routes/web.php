@@ -36,5 +36,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::resource('tickets', CustomerManagementController::class);
+    Route::post('tickets/store', [CustomerManagementController::class, 'store'])->name('tickets.store');
+    Route::post('tickets', [CustomerManagementController::class, 'closeOpenTicket'])->name('tickets.close-open-ticket');
     Route::resource('profile/personal-information', PersonalInformationController::class)->only(['index', 'store']);
 });

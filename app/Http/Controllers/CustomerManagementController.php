@@ -93,12 +93,14 @@ class CustomerManagementController extends Controller
      * Update the specified resource in storage.
      *
      */
-    public function update(Request $request, $id)
+    public function closeOpenTicket(Request $request)
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        CustomerManagement::where('id', $request->id)->update(['closed' => $request->close_open ]);
+
+        return redirect()->route('tickets.index');
     }
-
     /**
      * Remove the specified resource from storage.
      *

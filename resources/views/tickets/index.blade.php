@@ -5,32 +5,32 @@
         </h2>
     </x-slot>
 
+    @cannot('employee_access')
+        <div class="container bg-white pt-3 pb-3 mb-5">
+            <div class="row">
 
-    <div class="container bg-white pt-3 pb-3 mb-5">
-        <div class="row">
+                <div class="col-lg-4">
+                    <a href="{{ route('tickets.create') }}"
+                       class="btn btn-outline-success mb-3">
+                        {{ __('Submit a Complaint') }}
+                    </a>
+                </div>
 
-            <div class="col-lg-4">
-                <a href="{{ route('tickets.create') }}"
-                   class="btn btn-outline-success mb-3">
-                    {{ __('Submit a Complaint') }}
-                </a>
+                <div class="col-lg-4">
+
+                </div>
+
+                <div class="col-lg-4">
+                    <a href="{{ route('tickets.create') }}"
+                       class="btn btn-outline-success mb-3">
+                        {{ __('Submit a Complaint') }}
+                    </a>
+                </div>
+
+
             </div>
-
-            <div class="col-lg-4">
-
-            </div>
-
-            <div class="col-lg-4">
-                <a href="{{ route('tickets.create') }}"
-                   class="btn btn-outline-success mb-3">
-                    {{ __('Submit a Complaint') }}
-                </a>
-            </div>
-
-
         </div>
-    </div>
-
+    @endcan
 
     <div class="container bg-light">
         <div class="row">

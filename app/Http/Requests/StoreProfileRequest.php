@@ -34,20 +34,27 @@ class StoreProfileRequest extends FormRequest
                 'string',
                 'max:100'
             ],
+//            'phone_number' => [
+//                'required',
+//                'string',
+//                'min:8',
+//                'max:100',
+//                'unique:customers,phone_number'
+//            ],
             'street' => [
                 'string',
                 'min:5',
                 'max:255',
             ],
-            'fk_place_id' => [
+            'place_id' => [
                 'integer',
 //                'exists:place.id',
             ],
-            'fk_state_id' => [
+            'state_id' => [
                 'integer',
 //                'exists:state.id',
             ],
-            'fk_country_id' => [
+            'country_id' => [
                 'integer',
 //                'exists:country.id',
             ],
