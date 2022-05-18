@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerManagementController;
+use App\Http\Controllers\PersonalInformationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::resource('tickets', CustomerManagementController::class);
+    Route::resource('profile/personal-information', PersonalInformationController::class)->only(['index', 'store']);
 });

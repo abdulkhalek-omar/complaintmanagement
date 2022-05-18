@@ -22,6 +22,10 @@ class Customer extends Model
         'surname',
         'firstname',
         'phone_number',
+        'street',
+        'fk_place_id',
+        'fk_state_id',
+        'fk_country_id',
     ];
 
 
@@ -30,12 +34,12 @@ class Customer extends Model
         return Customer::select('customers.id')->where('customers.fk_user_id', $user->id)->first()->id;
     }
 
-    //protected $with = ['user', 'place', 'state', 'country'];
+    public static function getCustomer($user)
+    {
+        return Customer::where('customers.fk_user_id', $user->id)->first();
+    }
 
-//    public function user()
-//    {
-//        return $this->hasOne(User::class, 'id', 'fk_user_id');
-//    }
+//    protected $with = ['place', 'state', 'country'];
 //
 //    public function place()
 //    {
