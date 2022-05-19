@@ -25,19 +25,25 @@ class CustomerManagementController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $role = null;
         $tickets = null;
         $user = Auth::user();
 
-        foreach ($user->roles as $item) {
-            $role = $item['title'];
+        if (!session()->has('role')) {
+            foreach ($user->roles as $item) {
+                $role = $item['title'];
+            }
+            session(['role' => $role]);
         }
 
+        $role = session('role');
+
         if (!strcmp($role, 'User')) {
-            $tickets = CustomerManagement::where('fk_customer_id', Customer::getCustomerId($user))->orderBy('closed')->get();
+            Customer::getCustomerId($user);
+            $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->get();
         }
         if (!strcmp($role, 'Employee')) {
-            $tickets = CustomerManagement::where('fk_employee_id', Employee::getEmployeeId($user))->orderBy('closed')->get();
+            Employee::getEmployeeId($user);
+            $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->get();
         }
         if (!strcmp($role, 'Admin')) {
             $tickets = CustomerManagement::all()->sortBy('closed');
@@ -97,18 +103,45 @@ class CustomerManagementController extends Controller
     {
         abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        CustomerManagement::where('id', $request->id)->update(['closed' => $request->close_open ]);
+        CustomerManagement::where('id', $request->id)->update(['closed' => $request->close_open]);
 
         return redirect()->route('tickets.index');
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     */
-    public function destroy($id)
+
+
+    public function indexSatisfied()
+    {
+        return view('tickets.satisfied.index', [
+            'id' => request('id'),
+        ]);
+    }
+
+    public function storeSatisfied(Request $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // Close the Ticket, Customer is satisfied with the Answer
+        if (isset($request->satisfied) && !$request->satisfied) {
+            $request->validate([
+                'satisfied' => ['integer'],
+            ]);
 
+            CustomerManagement::where('id', $request->id)->update(['closed' => $request->satisfied]);
+            CustomerManagement::where('id', $request->id)->delete();
+        }
+
+        if (isset($request->comment) && $request->comment) {
+            $request->validate([
+                'comment' => ['required', 'min:5', 'max:3000'],
+            ]);
+
+            CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
+            CustomerManagement::where('id', $request->id)->delete();
+            $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
+
+            dd($deletedTicket);
+        }
+
+        return redirect()->route('tickets.index');
     }
 
 

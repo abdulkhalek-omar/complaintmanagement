@@ -45,12 +45,23 @@ if ($card->closed){
                 {{--                <h5 class="card-title">{{__('Created by')}}: {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>--}}
                 <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
 
-                {{--                <form action="{{ route('tickets.close-open-ticket') }}" method="POST">--}}
-                {{--                    @csrf--}}
-                {{--                    <input name="close_open" value="{{ $close_open }}" hidden/>--}}
-                {{--                    <input name="id" value="{{$card->id}}" hidden/>--}}
-                {{--                    <button type="submit" class="{{$btn_color . ' mt-auto align-self-start'}}">{{ $btn_text }}</button>--}}
-                {{--                </form>--}}
+                @if($close_open == 0)
+
+                    <form action=" {{ route('tickets.satisfied.store') }} " method="POST">
+                        @csrf
+                        <input name="satisfied" value="0" hidden/>
+                        <input name="id" value="{{ $card->id }}" hidden/>
+                        <button type="submit" class="form-control btn btn-outline-dark mb-1">
+                            {{ __('Satisfied') }}
+                        </button>
+                    </form>
+
+                    <a href=" {{ route('tickets.satisfied.index', ['id' => $card->id]) }} "
+                       class="form-control btn btn-outline-danger" role="button">
+                        {{ __('Not Satisfied') }}
+                    </a>
+
+                @endif
 
             </div>
             <div class="card-footer {{$footer_color}}">
@@ -60,7 +71,8 @@ if ($card->closed){
                     {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                 @else
                     {{__('Reply From Employee')}}
-                    <div class="mt-2">{{__('Answer from Employee')}}: {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
+                    <div class="mt-2">{{__('Answer from Employee')}}
+                        : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                 @endif
             </div>
         </div>

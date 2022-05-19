@@ -38,5 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('tickets', CustomerManagementController::class);
     Route::post('tickets/store', [CustomerManagementController::class, 'store'])->name('tickets.store');
     Route::post('tickets', [CustomerManagementController::class, 'closeOpenTicket'])->name('tickets.close-open-ticket');
+    Route::post('tickets/satisfied/store', [CustomerManagementController::class, 'storeSatisfied'])->name('tickets.satisfied.store');
+    Route::get('tickets/satisfied/index/{id}', [CustomerManagementController::class, 'indexSatisfied'])->name('tickets.satisfied.index');
     Route::resource('profile/personal-information', PersonalInformationController::class)->only(['index', 'store']);
 });

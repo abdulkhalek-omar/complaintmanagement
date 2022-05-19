@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->boolean('closed')->default(0)->comment('0 => Ticket Open, 1 Ticket closed');
             $table->timestamp('assignment_at')->nullable();
             $table->timestamp('expiry_at')->nullable();
+            $table->softDeletes();
         });
     }
 
