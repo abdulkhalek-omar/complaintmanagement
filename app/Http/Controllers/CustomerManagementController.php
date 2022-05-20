@@ -17,6 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerManagementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('user.session');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,26 +31,16 @@ class CustomerManagementController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $tickets = null;
-        $user = Auth::user();
 
-        if (!session()->has('role')) {
-            foreach ($user->roles as $item) {
-                $role = $item['title'];
-            }
-            session(['role' => $role]);
-        }
-
-        $role = session('role');
-
-        if (!strcmp($role, 'User')) {
-            Customer::getCustomerId($user);
+        if (!is_null(session('customer_id'))) {
             $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->get();
         }
-        if (!strcmp($role, 'Employee')) {
-            Employee::getEmployeeId($user);
+
+        if (!is_null(session('employee_id'))) {
             $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->get();
         }
-        if (!strcmp($role, 'Admin')) {
+
+        if (!strcmp( session('role'), 'Admin')) {
             $tickets = CustomerManagement::all()->sortBy('closed');
         }
 
@@ -68,9 +63,7 @@ class CustomerManagementController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        $user = Auth::user();
-
-        $this->assignTicketToEmployee($ticket, $request, $user);
+        $this->assignTicketToEmployee($ticket, $request);
 
         return redirect()->route('tickets.index');
     }
@@ -138,6 +131,7 @@ class CustomerManagementController extends Controller
             CustomerManagement::where('id', $request->id)->delete();
             $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
 
+            //TODO: create the deletedTicket in management_hierarchies;
             dd($deletedTicket);
         }
 
@@ -151,7 +145,7 @@ class CustomerManagementController extends Controller
      *
      * @return integer
      */
-    private function getEmployeeWithoutLast()
+    private function getEmployeeWithoutLast(): int
     {
 //        $employees = CustomerManagement::orderBy('fk_employee_id')->get()
 //            ->groupBy(function ($data) {
@@ -173,13 +167,13 @@ class CustomerManagementController extends Controller
      * @param StoreTicketRequest $request
      * @return void
      */
-    private function assignTicketToEmployee($ticket, StoreTicketRequest $request, $user): void
+    private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
     {
         $time = Carbon::now();
 
         CustomerManagement::create([
             'fk_ticket_id' => $ticket->id,
-            'fk_customer_id' => Customer::getCustomerId($user),
+            'fk_customer_id' => session('customer_id'),
             'fk_employee_id' => $this->getEmployeeWithoutLast(),
             'fk_keyword_id' => $request->input('id'),
             'closed' => 0,

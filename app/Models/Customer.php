@@ -31,7 +31,10 @@ class Customer extends Model
 
     public static function getCustomerId($user)
     {
-        return Customer::select('customers.id')->where('customers.fk_user_id', $user->id)->first()->id;
+        if (!session()->has('customer_id')){
+            $customer_id = Customer::select('customers.id')->where('customers.fk_user_id', $user->id)->first()->id;
+            session(['customer_id' => $customer_id]);
+        }
     }
 
     public static function getCustomer($user)

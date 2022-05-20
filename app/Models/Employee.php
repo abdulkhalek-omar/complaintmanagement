@@ -26,7 +26,10 @@ class Employee extends Model
 
     public static function getEmployeeId($user)
     {
-        return Employee::select('employees.id')->where('employees.fk_user_id', $user->id)->first()->id;
+        if (!session()->has('employee_id')) {
+            $employee_id = Employee::select('employees.id')->where('employees.fk_user_id', $user->id)->first()->id;
+            session(['employee_id' => $employee_id]);
+        }
     }
 
 //
