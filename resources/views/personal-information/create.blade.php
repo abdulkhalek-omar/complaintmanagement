@@ -26,7 +26,7 @@
 
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <form method="POST" action="{{ route('personal-information.store') }}" >
+                <form method="POST" action="{{ route('personal-information.store') }}">
                     @csrf
 
                     <div class="card-body">
@@ -40,7 +40,7 @@
                                          class="{{ $errors->has('firstname') ? 'is-invalid' : '' }}"
                                          name="firstname"
                                          autocomplete="firstname"
-                                         value="{{$personalInfo->firstname}}"
+                                         value=" {{ isset($personalInfo->firstname) ? $personalInfo->firstname : '' }} "
                                          autofocus
                             />
                             <x-jet-input-error for="forename"/>
@@ -54,23 +54,23 @@
                                          class="{{ $errors->has('surname') ? 'is-invalid' : '' }}"
                                          name="surname"
                                          autocomplete="surname"
-                                         value="{{$personalInfo->surname}}"
+                                         value="{{ isset($personalInfo->surname) ? $personalInfo->surname : '' }}"
                             />
                             <x-jet-input-error for="surname"/>
                         </div>
 
                         <!-- Phone Number -->
-{{--                        <div class="mb-3">--}}
-{{--                            <x-jet-label for="phone_number" value="{{ __('Phone Number') }}"/>--}}
-{{--                            <x-jet-input id="phone_number"--}}
-{{--                                         type="text"--}}
-{{--                                         class="{{ $errors->has('phone_number') ? 'is-invalid' : '' }}"--}}
-{{--                                         name="phone_number"--}}
-{{--                                         autocomplete="phone_number"--}}
-{{--                                         value="{{$personalInfo->phone_number}}"--}}
-{{--                            />--}}
-{{--                            <x-jet-input-error for="phone_number"/>--}}
-{{--                        </div>--}}
+                        {{--                        <div class="mb-3">--}}
+                        {{--                            <x-jet-label for="phone_number" value="{{ __('Phone Number') }}"/>--}}
+                        {{--                            <x-jet-input id="phone_number"--}}
+                        {{--                                         type="text"--}}
+                        {{--                                         class="{{ $errors->has('phone_number') ? 'is-invalid' : '' }}"--}}
+                        {{--                                         name="phone_number"--}}
+                        {{--                                         autocomplete="phone_number"--}}
+                        {{--                                         value="{{$personalInfo->phone_number}}"--}}
+                        {{--                            />--}}
+                        {{--                            <x-jet-input-error for="phone_number"/>--}}
+                        {{--                        </div>--}}
 
 
                         <!-- Street -->
@@ -81,7 +81,7 @@
                                          class="{{ $errors->has('street') ? 'is-invalid' : '' }}"
                                          name="street"
                                          autocomplete="street"
-                                         value="{{$personalInfo->street}}"
+                                         value="{{ isset($personalInfo->street) ? $personalInfo->street : '' }}"
                             />
                         </div>
 
@@ -93,13 +93,14 @@
                                 @foreach($places as $place)
                                     <option
                                         value="{{__($place->id)}}"
-                                        @if($place->id == $personalInfo->fk_place_id) selected @endif>
+                                        @isset($personalInfo->fk_place_id)
+                                            @if($place->id == $personalInfo->fk_place_id) selected @endif>
+                                        @endisset
                                         {{__($place->name)}}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-
 
                         <!-- State -->
                         <div class="mb-3">
@@ -108,7 +109,9 @@
                                 @foreach($states as $state)
                                     <option
                                         value="{{__($state->id)}}"
-                                        @if($state->id == $personalInfo->fk_state_id) selected @endif>
+                                        @isset($personalInfo->fk_state_id)
+                                            @if($state->id == $personalInfo->fk_state_id) selected @endif>
+                                        @endisset
                                         {{__($state->name)}}
                                     </option>
                                 @endforeach
@@ -123,7 +126,9 @@
                                 @foreach($countries as $country)
                                     <option
                                         value="{{__($country->id)}}"
-                                        @if($country->id == $personalInfo->fk_country_id) selected @endif>
+                                        @isset($personalInfo->fk_country_id)
+                                            @if($country->id == $personalInfo->fk_country_id) selected @endif>
+                                        @endisset
                                         {{__($country->name)}}
                                     </option>
                                 @endforeach
