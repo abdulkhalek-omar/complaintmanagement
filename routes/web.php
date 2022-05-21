@@ -24,10 +24,6 @@ Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => '\App\Http\Controlle
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->group(function () {
-
-//        Route::get('/showUsers', [EmployeeController::class, 'showUsers']);
-//        Route::get('/showUser', [EmployeeController::class, 'showUser']);
-
         Route::get('/dashboard', function () {
             return view('dashboard');
         })->name('dashboard');

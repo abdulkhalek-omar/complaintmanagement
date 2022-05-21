@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\CustomerManagement;
 use App\Models\Employee;
 use App\Models\Keyword;
+use App\Models\ManagementHierarchie;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,10 +23,6 @@ class CustomerManagementController extends Controller
         $this->middleware('user.session');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     */
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -40,7 +37,7 @@ class CustomerManagementController extends Controller
             $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->get();
         }
 
-        if (!strcmp( session('role'), 'Admin')) {
+        if (!strcmp(session('role'), 'Admin')) {
             $tickets = CustomerManagement::all()->sortBy('closed');
         }
 
@@ -49,10 +46,6 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     */
     public function store(StoreTicketRequest $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -77,10 +70,6 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     */
     public function show($id)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -88,10 +77,7 @@ class CustomerManagementController extends Controller
         return view('tickets.show');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     */
+
     public function closeOpenTicket(Request $request)
     {
         abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -104,6 +90,8 @@ class CustomerManagementController extends Controller
 
     public function indexSatisfied()
     {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('tickets.satisfied.index', [
             'id' => request('id'),
         ]);
@@ -126,14 +114,10 @@ class CustomerManagementController extends Controller
             $request->validate([
                 'comment' => ['required', 'min:5', 'max:3000'],
             ]);
-
-            CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
-            CustomerManagement::where('id', $request->id)->delete();
-            $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
-
-            //TODO: create the deletedTicket in management_hierarchies;
-            dd($deletedTicket);
         }
+
+
+        $this->placeTicketInHierarchy($request);
 
         return redirect()->route('tickets.index');
     }
@@ -157,16 +141,11 @@ class CustomerManagementController extends Controller
             CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
                 ->where('closed', 0)
                 ->groupBy('fk_employee_id')
-                ->orderBy('numberOfOpenTickets', 'ASC')
+                ->orderBy('numberOfOpenTickets')
                 ->first();
         return $employee->fk_employee_id;
     }
 
-    /**
-     * @param $ticket
-     * @param StoreTicketRequest $request
-     * @return void
-     */
     private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
     {
         $time = Carbon::now();
@@ -179,6 +158,29 @@ class CustomerManagementController extends Controller
             'closed' => 0,
             'assignment_at' => $time->format('Y-m-d H:i:s'),
             'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+
+    private function placeTicketInHierarchy(Request $request): void
+    {
+        CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
+        CustomerManagement::where('id', $request->id)->delete();
+        $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
+
+        //TODO: Test => create the deletedTicket in management_hierarchies;
+        /*
+         * in customer_management: save answer from Employee
+         * in management_h: save answer from Customer and Employee
+         * in management_h: save Key_work id
+         */
+        ManagementHierarchie::create([
+            'fk_employee_id' => $deletedTicket->fk_employee_id,
+            'fk_customer_id' => $deletedTicket->fk_customer_id,
+            'fk_ticket_id' => $deletedTicket->fk_ticket_id,
+            'closed' => $deletedTicket->closed,
+            'replied' => !is_null($request->comment) ? 1 : 0,
+            'answer' => !is_null($request->comment) ? $request->comment : '',
         ]);
     }
 }
