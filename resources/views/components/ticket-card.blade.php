@@ -2,18 +2,19 @@
 
 @php
     $card_color               = "text-white bg-dark";
-    $btn_color                = "btn btn-secondary";
+    $btn_color                = "btn btn-outline-secondary";
     $footer_color             = "text-muted";
     $btn_text                 = "Close Ticket";
     $close_open               = 1;
 if ($card->closed){
     $card_color               = "text-white bg-success";
-    $btn_color                = "btn btn-dark";
+    $btn_color                = "btn btn-outline-dark";
     $footer_color             = "text-info";
     $btn_text                 = "Open Ticket";
     $close_open               = 0;
 }
 @endphp
+
 @canany(['employee_access', 'admin_access'])
     <div class="col-lg-4 mb-5 d-flex align-items-stretch">
         <div class="card {{$card_color}}">
@@ -26,8 +27,15 @@ if ($card->closed){
                     @csrf
                     <input name="close_open" value="{{ $close_open }}" hidden/>
                     <input name="id" value="{{$card->id}}" hidden/>
-                    <button type="submit" class="{{$btn_color . ' mt-auto align-self-start'}}">{{ $btn_text }}</button>
+                    <button type="submit" class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ $btn_text }}</button>
                 </form>
+
+                @can('admin_access')
+                    <a href=" {{ route('tickets.assign.index', ['employee_id' => $card->employee->id, 'id' => $card->id]) }} "
+                       class="btn btn-outline-light mb-1 mt-2 form-control" role="button">
+                        {{ __('Assigning the ticket to a Employee or another Employee') }}
+                    </a>
+                @endcan
 
             </div>
             <div class="card-footer {{$footer_color}}">

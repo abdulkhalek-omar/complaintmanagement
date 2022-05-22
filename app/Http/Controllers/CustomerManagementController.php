@@ -78,49 +78,8 @@ class CustomerManagementController extends Controller
     }
 
 
-    public function closeOpenTicket(Request $request)
-    {
-        abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        CustomerManagement::where('id', $request->id)->update(['closed' => $request->close_open]);
-
-        return redirect()->route('tickets.index');
-    }
 
 
-    public function indexSatisfied()
-    {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('tickets.satisfied.index', [
-            'id' => request('id'),
-        ]);
-    }
-
-    public function storeSatisfied(Request $request)
-    {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // Close the Ticket, Customer is satisfied with the Answer
-        if (isset($request->satisfied) && !$request->satisfied) {
-            $request->validate([
-                'satisfied' => ['integer'],
-            ]);
-
-            CustomerManagement::where('id', $request->id)->update(['closed' => $request->satisfied]);
-            CustomerManagement::where('id', $request->id)->delete();
-        }
-
-        if (isset($request->comment) && $request->comment) {
-            $request->validate([
-                'comment' => ['required', 'min:5', 'max:3000'],
-            ]);
-        }
-
-
-        $this->placeTicketInHierarchy($request);
-
-        return redirect()->route('tickets.index');
-    }
 
 
     /**
@@ -131,18 +90,13 @@ class CustomerManagementController extends Controller
      */
     private function getEmployeeWithoutLast(): int
     {
-//        $employees = CustomerManagement::orderBy('fk_employee_id')->get()
-//            ->groupBy(function ($data) {
-//            return $data->fk_employee_id;
-//        })->map(function ($numberOfOpenTickets){
-//            return $numberOfOpenTickets->count();
-//        });
         $employee =
             CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
                 ->where('closed', 0)
                 ->groupBy('fk_employee_id')
                 ->orderBy('numberOfOpenTickets')
                 ->first();
+
         return $employee->fk_employee_id;
     }
 
@@ -161,26 +115,4 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-
-    private function placeTicketInHierarchy(Request $request): void
-    {
-        CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
-        CustomerManagement::where('id', $request->id)->delete();
-        $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
-
-        //TODO: Test => create the deletedTicket in management_hierarchies;
-        /*
-         * in customer_management: save answer from Employee
-         * in management_h: save answer from Customer and Employee
-         * in management_h: save Key_work id
-         */
-        ManagementHierarchie::create([
-            'fk_employee_id' => $deletedTicket->fk_employee_id,
-            'fk_customer_id' => $deletedTicket->fk_customer_id,
-            'fk_ticket_id' => $deletedTicket->fk_ticket_id,
-            'closed' => $deletedTicket->closed,
-            'replied' => !is_null($request->comment) ? 1 : 0,
-            'answer' => !is_null($request->comment) ? $request->comment : '',
-        ]);
-    }
 }

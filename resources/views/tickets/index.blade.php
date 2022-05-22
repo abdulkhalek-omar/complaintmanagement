@@ -20,13 +20,6 @@
 
                 </div>
 
-                <div class="col-lg-4">
-                    <a href="{{ route('tickets.create') }}"
-                       class="btn btn-outline-success mb-3">
-                        {{ __('Submit a Complaint') }}
-                    </a>
-                </div>
-
 
             </div>
         </div>
