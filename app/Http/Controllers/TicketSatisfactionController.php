@@ -47,11 +47,14 @@ class TicketSatisfactionController extends Controller
 
     private function placeTicketInHierarchy(Request $request): void
     {
-        CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
+        CustomerManagement::where('id', $request->id)->update([
+            'closed' => 0,
+            'comment' => !is_null($request->comment) ? $request->comment : '',
+        ]);
         CustomerManagement::where('id', $request->id)->delete();
         $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
 
-        $this->createTicketInHierarchy($request);
+        $this->createTicketInHierarchy($deletedTicket);
     }
 
     public static function createTicketInHierarchy($ticket)
@@ -61,7 +64,7 @@ class TicketSatisfactionController extends Controller
             'fk_customer_id' => $ticket->fk_customer_id,
             'fk_ticket_id' => $ticket->fk_ticket_id,
             'fk_keyword_id' => $ticket->fk_keyword_id,
-            'closed' => $ticket->closed,
+            'closed' => !is_null($ticket->closed) ? 0 : 1,
             'response' => !is_null($ticket->response) ? $ticket->response : '',
             'replied' => !is_null($ticket->replied) ? 1 : 0,
             'comment' => !is_null($ticket->comment) ? $ticket->comment : '',
