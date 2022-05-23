@@ -34,7 +34,6 @@
                 <button class="btn btn-outline-secondary btn-lg w-100 " type="submit">
                     {{__('Submit')}}
                 </button>
-
             </form>
         </div>
 

@@ -32,8 +32,12 @@ class CustomerManagementFactory extends Factory
             'fk_keyword_id' => $this->faker->randomElement($keyword_ids),
             'fk_employee_id' => $this->faker->randomElement($employee_ids),
             'closed' => $this->faker->boolean,
+            'response' => $this->faker->sentence,
+            'replied' => $this->faker->boolean,
+            'comment' => $this->faker->sentence,
             'assignment_at' => $currentDateTime->format('Y-m-d H:i:s'),
             'expiry_at' => $currentDateTime->addDays(3)->format('Y-m-d H:i:s'),
+            'replied_at' => $currentDateTime->addDays(9)->format('Y-m-d H:i:s'),
         ];
     }
 }

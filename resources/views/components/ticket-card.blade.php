@@ -5,13 +5,11 @@
     $btn_color                = "btn btn-outline-secondary";
     $footer_color             = "text-muted";
     $btn_text                 = "Close Ticket";
-    $close_open               = 1;
 if ($card->closed){
     $card_color               = "text-white bg-success";
     $btn_color                = "btn btn-outline-dark";
     $footer_color             = "text-info";
     $btn_text                 = "Open Ticket";
-    $close_open               = 0;
 }
 @endphp
 
@@ -23,18 +21,29 @@ if ($card->closed){
                     : {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>
                 <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
 
-                <form action="{{ route('tickets.close-open-ticket') }}" method="POST">
+                @if($card->closed)
+                <form action="{{ route('tickets.openTicket') }}" method="POST">
                     @csrf
-                    <input name="close_open" value="{{ $close_open }}" hidden/>
                     <input name="id" value="{{$card->id}}" hidden/>
-                    <button type="submit" class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ $btn_text }}</button>
+                    <button type="submit" class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ __($btn_text) }}</button>
                 </form>
+                @endif
+
+                @if(!$card->closed)
+                    <form action="{{ route('tickets.closeTicket.index', ['id' => $card->id]) }}" method="GET">
+                        @csrf
+                        <button type="submit" class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ __($btn_text) }}</button>
+                    </form>
+                @endif
 
                 @can('admin_access')
-                    <a href=" {{ route('tickets.assign.index', ['employee_id' => $card->employee->id, 'id' => $card->id]) }} "
-                       class="btn btn-outline-light mb-1 mt-2 form-control" role="button">
-                        {{ __('Assigning the ticket to a Employee or another Employee') }}
-                    </a>
+
+                    <form action="{{ route('tickets.assign.index', ['employee_id' => $card->employee->id, 'id' => $card->id]) }}" method="GET">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-light mb-1 mt-2 form-control">
+                            {{ __('Assigning the ticket to a Employee or another Employee') }}
+                        </button>
+                    </form>
                 @endcan
 
             </div>
@@ -53,7 +62,7 @@ if ($card->closed){
                 {{--                <h5 class="card-title">{{__('Created by')}}: {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>--}}
                 <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
 
-                @if($close_open == 0)
+                @if($card->closed)
 
                     <form action=" {{ route('tickets.satisfied.store') }} " method="POST">
                         @csrf
@@ -64,21 +73,24 @@ if ($card->closed){
                         </button>
                     </form>
 
-                    <a href=" {{ route('tickets.satisfied.index', ['id' => $card->id]) }} "
-                       class="form-control btn btn-outline-danger" role="button">
-                        {{ __('Not Satisfied') }}
-                    </a>
+
+                    <form action=" {{ route('tickets.satisfied.index', ['id' => $card->id]) }} " method="GET">
+                        @csrf
+                        <button type="submit" class="form-control btn btn-outline-danger">
+                            {{ __('Not Satisfied') }}
+                        </button>
+                    </form>
 
                 @endif
 
             </div>
             <div class="card-footer {{$footer_color}}">
-                @if($close_open == 1)
+                @if(!$card->closed)
                     <div>{{__('Assigned to')}}: {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                     {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
                     {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                 @else
-                    {{__('Reply From Employee')}}
+                    {{__($card->response)}}
                     <div class="mt-2">{{__('Answer from Employee')}}
                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                 @endif

@@ -36,7 +36,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::resource('tickets', CustomerManagementController::class);
     Route::post('tickets/store', [CustomerManagementController::class, 'store'])->name('tickets.store');
-    Route::post('tickets', [TicketCloseOpenController::class, 'closeOpenTicket'])->name('tickets.close-open-ticket');
+
+    Route::post('tickets', [TicketCloseOpenController::class, 'openTicket'])->name('tickets.openTicket');
+
+    Route::get('tickets/closeTicket/index/{id}', [TicketCloseOpenController::class, 'index'])->name('tickets.closeTicket.index');
+    Route::post('tickets/closeTicket/store', [TicketCloseOpenController::class, 'closeTicket'])->name('tickets.closeTicket.store');
+
 
     Route::get('tickets/satisfied/index/{id}', [TicketSatisfactionController::class, 'index'])->name('tickets.satisfied.index');
     Route::post('tickets/satisfied/store', [TicketSatisfactionController::class, 'store'])->name('tickets.satisfied.store');

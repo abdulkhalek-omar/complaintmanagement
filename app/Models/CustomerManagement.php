@@ -19,14 +19,19 @@ class CustomerManagement extends Model
         'fk_customer_id',
         'fk_employee_id',
         'fk_keyword_id',
+        'closed',
+        'response',
+        'replied',
+        'comment',
         'assignment_at',
         'expiry_at',
-        'closed',
+        'replied_at',
     ];
 
     protected $dates = [
         'assignment_at',
         'expiry_at',
+        'replied_at',
     ];
 
     protected $with = ['ticket', 'customer', 'keyword', 'employee'];

@@ -14,11 +14,22 @@ class ManagementHierarchie extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'fk_employee_id',
-        'fk_customer_id',
         'fk_ticket_id',
+        'fk_customer_id',
+        'fk_employee_id',
+        'fk_keyword_id',
         'closed',
-        'answer',
+        'response',
         'replied',
+        'comment',
+        'assignment_at',
+        'expiry_at',
+        'replied_at',
+    ];
+
+    protected $dates = [
+        'assignment_at',
+        'expiry_at',
+        'replied_at',
     ];
 }

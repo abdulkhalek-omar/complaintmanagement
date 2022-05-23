@@ -34,15 +34,22 @@ class TicketAssignController extends Controller
             'employee_id' => ['required', 'integer'],
         ]);
 
+        $this->assignTicketToEmployee($request->id, $request->employee_id);
+
+        return redirect()->route('tickets.index');
+    }
+
+
+    public static function assignTicketToEmployee($ticketId, $employeeId, $closed = 0): void
+    {
         $time = Carbon::now();
 
-        CustomerManagement::where('id', $request->id)->update([
-            'fk_employee_id' => $request->employee_id,
+        CustomerManagement::where('id', $ticketId)->update([
+            'fk_employee_id' => $employeeId,
+            'closed' => $closed,
             'assignment_at' => $time->format('Y-m-d H:i:s'),
             'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
         ]);
-
-        return redirect()->route('tickets.index');
     }
 
 }

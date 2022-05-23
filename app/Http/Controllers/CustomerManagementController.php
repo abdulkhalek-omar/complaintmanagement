@@ -41,12 +41,42 @@ class CustomerManagementController extends Controller
             $tickets = CustomerManagement::all()->sortBy('closed');
         }
 
-        return view('tickets.index', [
-            'cards' => $tickets,
-        ]);
+//        if ($now->gte($ticket->expiry_at)){
+//            return $ticket;
+//        };
+
+
+        if (!is_null($tickets)) {
+            $now = Carbon::now();
+
+            $expiredTickets = $tickets->reject(function ($ticket) {
+                return $ticket->closed === 1;
+            })->reject(function ($ticket) use ($now) {
+                return $now->lte($ticket->expiry_at);
+            });
+
+
+            foreach ($expiredTickets as $expiredTicket) {
+                CustomerManagement::where('id', $expiredTicket->id)->delete();
+                TicketAssignController::assignTicketToEmployee($expiredTicket->id, $expiredTicket->fk_employee_id, 1);
+                TicketSatisfactionController::createTicketInHierarchy($expiredTicket);
+            }
+
+//            $expiredTickets->each(function ($expiredTicket){
+//
+//            });
+
+
+//            dd($expiredTicket);
+//            dd($expiredTicket->count());
+//            dd(gettype($expiredTicket));
+        }
+
+        return view('tickets.index', ['cards' => $tickets,]);
     }
 
-    public function store(StoreTicketRequest $request)
+    public
+    function store(StoreTicketRequest $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -61,7 +91,8 @@ class CustomerManagementController extends Controller
         return redirect()->route('tickets.index');
     }
 
-    public function create()
+    public
+    function create()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -70,17 +101,13 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-    public function show($id)
+    public
+    function show($id)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('tickets.show');
     }
-
-
-
-
-
 
     /**
      *
@@ -88,7 +115,8 @@ class CustomerManagementController extends Controller
      *
      * @return integer
      */
-    private function getEmployeeWithoutLast(): int
+    private
+    function getEmployeeWithoutLast(): int
     {
         $employee =
             CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
@@ -100,7 +128,8 @@ class CustomerManagementController extends Controller
         return $employee->fk_employee_id;
     }
 
-    private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
+    private
+    function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
     {
         $time = Carbon::now();
 

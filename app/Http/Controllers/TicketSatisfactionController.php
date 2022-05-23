@@ -45,26 +45,29 @@ class TicketSatisfactionController extends Controller
     }
 
 
-
     private function placeTicketInHierarchy(Request $request): void
     {
         CustomerManagement::where('id', $request->id)->update(['closed' => 0]);
         CustomerManagement::where('id', $request->id)->delete();
         $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
 
-        //TODO: Test => create the deletedTicket in management_hierarchies;
-        /*
-         * in customer_management: save answer from Employee
-         * in management_h: save answer from Customer and Employee
-         * in management_h: save Key_work id
-         */
+        $this->createTicketInHierarchy($request);
+    }
+
+    public static function createTicketInHierarchy($ticket)
+    {
         ManagementHierarchie::create([
-            'fk_employee_id' => $deletedTicket->fk_employee_id,
-            'fk_customer_id' => $deletedTicket->fk_customer_id,
-            'fk_ticket_id' => $deletedTicket->fk_ticket_id,
-            'closed' => $deletedTicket->closed,
-            'replied' => !is_null($request->comment) ? 1 : 0,
-            'answer' => !is_null($request->comment) ? $request->comment : '',
+            'fk_employee_id' => $ticket->fk_employee_id,
+            'fk_customer_id' => $ticket->fk_customer_id,
+            'fk_ticket_id' => $ticket->fk_ticket_id,
+            'fk_keyword_id' => $ticket->fk_keyword_id,
+            'closed' => $ticket->closed,
+            'response' => !is_null($ticket->response) ? $ticket->response : '',
+            'replied' => !is_null($ticket->replied) ? 1 : 0,
+            'comment' => !is_null($ticket->comment) ? $ticket->comment : '',
+            'assignment_at' => $ticket->assignment_at,
+            'expiry_at' => $ticket->expiry_at,
+            'replied_at' => $ticket->replied_at,
         ]);
     }
 }

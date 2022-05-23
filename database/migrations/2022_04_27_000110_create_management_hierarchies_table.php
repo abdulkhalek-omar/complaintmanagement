@@ -14,12 +14,16 @@ return new class extends Migration {
     {
         Schema::create('management_hierarchies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fk_employee_id')->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_customer_id')->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('fk_ticket_id')->references('id')->on('tickets')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_ticket_id')->nullable()->references('id')->on('tickets')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_customer_id')->nullable()->references('id')->on('customers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_employee_id')->nullable()->references('id')->on('employees')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('fk_keyword_id')->nullable()->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('closed')->default(0)->comment('0 => Ticket was not closed, 1 Ticket was closed');
+            $table->text('response')->nullable();
             $table->boolean('replied')->default(0)->comment('0 => not replied; 1 => replied');
-            $table->text('answer')->nullable();
+            $table->text('comment')->nullable()->comment('The Comment from Customer');
+            $table->timestamp('assignment_at')->nullable();
+            $table->timestamp('expiry_at')->nullable();
             $table->timestamp('replied_at')->useCurrent();
         });
     }
