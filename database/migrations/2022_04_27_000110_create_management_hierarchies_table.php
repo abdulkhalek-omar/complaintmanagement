@@ -20,11 +20,11 @@ return new class extends Migration {
             $table->foreignId('fk_keyword_id')->nullable()->references('id')->on('keywords')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('closed')->default(0)->comment('0 => Ticket was not closed, 1 Ticket was closed');
             $table->text('response')->nullable();
-            $table->boolean('replied')->default(0)->comment('0 => not replied; 1 => replied');
+            $table->boolean('satisfied')->nullable()->comment('0 => unsatisfied; 1 => satisfied');
             $table->text('comment')->nullable()->comment('The Comment from Customer');
             $table->timestamp('assignment_at')->nullable();
             $table->timestamp('expiry_at')->nullable();
-            $table->timestamp('replied_at')->useCurrent();
+            $table->timestamp('replied_at')->nullable();
         });
     }
 

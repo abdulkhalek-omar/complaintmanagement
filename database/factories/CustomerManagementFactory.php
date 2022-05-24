@@ -33,7 +33,7 @@ class CustomerManagementFactory extends Factory
             'fk_employee_id' => $this->faker->randomElement($employee_ids),
             'closed' => $this->faker->boolean,
             'response' => $this->faker->sentence,
-            'replied' => $this->faker->boolean,
+            'satisfied' => $this->faker->boolean,
             'comment' => $this->faker->sentence,
             'assignment_at' => $currentDateTime->format('Y-m-d H:i:s'),
             'expiry_at' => $currentDateTime->addDays(3)->format('Y-m-d H:i:s'),

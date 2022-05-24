@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerManagement;
 use App\Models\ManagementHierarchie;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,54 +24,44 @@ class TicketSatisfactionController extends Controller
     public function store(Request $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // Close the Ticket, Customer is satisfied with the Answer
-        if (isset($request->satisfied) && !$request->satisfied) {
-            $request->validate([
-                'satisfied' => ['integer'],
-            ]);
 
-            CustomerManagement::where('id', $request->id)->update(['closed' => $request->satisfied]);
-            CustomerManagement::where('id', $request->id)->delete();
-        }
+        $request->validate([
+            'comment' => ['required', 'min:5', 'max:3000'],
+        ]);
+        $time = Carbon::now();
 
-        if (isset($request->comment) && $request->comment) {
-            $request->validate([
-                'comment' => ['required', 'min:5', 'max:3000'],
-            ]);
-        }
+        CustomerManagement::where('id', $request->id)->update([
+            'satisfied' => 0,
+            'comment' => $request->comment,
+            'replied_at' => $time->format('Y-m-d H:i:s'),
+        ]);
+        $ticket = CustomerManagementController::find($request->id);
+        ManagementHierarchyController::createTicketInHierarchy($ticket);
+        CustomerManagement::where('id', $request->id)->update([
+            'fk_employee_id' => CustomerManagementController::getEmployeeWithoutLast(),
+            'closed' => 0,
+            'response' => null,
+            'satisfied' => null,
+            'comment' => null,
+            'assignment_at' => $time->format('Y-m-d H:i:s'),
+            'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
+            'replied_at' => null,
+        ]);
 
-        $this->placeTicketInHierarchy($request);
+        return redirect()->route('tickets.index');
+    }
+
+    public function update(Request $request)
+    {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        CustomerManagementController::update($request->id, 'satisfied', 1);
+        CustomerManagementController::delete($request->id);
+        $deletedTicket = CustomerManagementController::find($request->id, true);
+        ManagementHierarchyController::createTicketInHierarchy($deletedTicket);
 
         return redirect()->route('tickets.index');
     }
 
 
-    private function placeTicketInHierarchy(Request $request): void
-    {
-        CustomerManagement::where('id', $request->id)->update([
-            'closed' => 0,
-            'comment' => !is_null($request->comment) ? $request->comment : '',
-        ]);
-        CustomerManagement::where('id', $request->id)->delete();
-        $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
-
-        $this->createTicketInHierarchy($deletedTicket);
-    }
-
-    public static function createTicketInHierarchy($ticket)
-    {
-        ManagementHierarchie::create([
-            'fk_employee_id' => $ticket->fk_employee_id,
-            'fk_customer_id' => $ticket->fk_customer_id,
-            'fk_ticket_id' => $ticket->fk_ticket_id,
-            'fk_keyword_id' => $ticket->fk_keyword_id,
-            'closed' => !is_null($ticket->closed) ? 0 : 1,
-            'response' => !is_null($ticket->response) ? $ticket->response : '',
-            'replied' => !is_null($ticket->replied) ? 1 : 0,
-            'comment' => !is_null($ticket->comment) ? $ticket->comment : '',
-            'assignment_at' => $ticket->assignment_at,
-            'expiry_at' => $ticket->expiry_at,
-            'replied_at' => $ticket->replied_at,
-        ]);
-    }
 }

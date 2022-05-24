@@ -41,35 +41,17 @@ class CustomerManagementController extends Controller
             $tickets = CustomerManagement::all()->sortBy('closed');
         }
 
-//        if ($now->gte($ticket->expiry_at)){
-//            return $ticket;
-//        };
-
-
         if (!is_null($tickets)) {
             $now = Carbon::now();
 
-            $expiredTickets = $tickets->reject(function ($ticket) {
+            $tickets->reject(function ($ticket) {
                 return $ticket->closed === 1;
             })->reject(function ($ticket) use ($now) {
                 return $now->lte($ticket->expiry_at);
+            })->map(function ($expiredTicket) {
+                TicketAssignController::assignTicketToEmployee($expiredTicket->id, CustomerManagementController::getEmployeeWithoutLast());
+                ManagementHierarchyController::createTicketInHierarchy($expiredTicket);
             });
-
-
-            foreach ($expiredTickets as $expiredTicket) {
-                CustomerManagement::where('id', $expiredTicket->id)->delete();
-                TicketAssignController::assignTicketToEmployee($expiredTicket->id, $expiredTicket->fk_employee_id, 1);
-                TicketSatisfactionController::createTicketInHierarchy($expiredTicket);
-            }
-
-//            $expiredTickets->each(function ($expiredTicket){
-//
-//            });
-
-
-//            dd($expiredTicket);
-//            dd($expiredTicket->count());
-//            dd(gettype($expiredTicket));
         }
 
         return view('tickets.index', ['cards' => $tickets,]);
@@ -115,8 +97,7 @@ class CustomerManagementController extends Controller
      *
      * @return integer
      */
-    private
-    function getEmployeeWithoutLast(): int
+    public static function getEmployeeWithoutLast(): int
     {
         $employee =
             CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
@@ -128,19 +109,35 @@ class CustomerManagementController extends Controller
         return $employee->fk_employee_id;
     }
 
-    private
-    function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
+    private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
     {
         $time = Carbon::now();
 
         CustomerManagement::create([
             'fk_ticket_id' => $ticket->id,
             'fk_customer_id' => session('customer_id'),
-            'fk_employee_id' => $this->getEmployeeWithoutLast(),
+            'fk_employee_id' => CustomerManagementController::getEmployeeWithoutLast(),
             'fk_keyword_id' => $request->input('id'),
             'closed' => 0,
             'assignment_at' => $time->format('Y-m-d H:i:s'),
             'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    public static function delete($id)
+    {
+        CustomerManagement::where('id', $id)->delete();
+    }
+
+    public static function find($id, $withTrashed = false)
+    {
+        return $withTrashed ? CustomerManagement::withTrashed()->find($id) : CustomerManagement::find($id);
+    }
+
+    public static function update($id, $columnName, $value)
+    {
+        CustomerManagement::where('id', $id)->update([
+            $columnName => $value,
         ]);
     }
 

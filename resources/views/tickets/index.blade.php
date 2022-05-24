@@ -83,23 +83,9 @@
                                     <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
 
 
-                                    <form action=" {{ route('tickets.satisfied.store') }} " method="POST">
-                                        @csrf
-                                        <input name="satisfied" value="0" hidden/>
-                                        <input name="id" value="{{ $card->id }}" hidden/>
-                                        <button type="submit" class="form-control btn btn-outline-dark mb-1">
-                                            {{ __('Satisfied') }}
-                                        </button>
-                                    </form>
+                                    @include('tickets.satisfied.update')
 
-
-                                    <form action=" {{ route('tickets.satisfied.index', ['id' => $card->id]) }} "
-                                          method="GET">
-                                        @csrf
-                                        <button type="submit" class="form-control btn btn-outline-danger">
-                                            {{ __('Not Satisfied') }}
-                                        </button>
-                                    </form>
+                                    @include('tickets.satisfied.get')
 
                                 </div>
                                 <div class="card-footer {{$footer_color}}">

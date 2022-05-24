@@ -21,7 +21,7 @@ class CustomerManagement extends Model
         'fk_keyword_id',
         'closed',
         'response',
-        'replied',
+        'satisfied',
         'comment',
         'assignment_at',
         'expiry_at',

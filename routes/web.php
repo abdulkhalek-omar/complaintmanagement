@@ -44,7 +44,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('tickets/satisfied/index/{id}', [TicketSatisfactionController::class, 'index'])->name('tickets.satisfied.index');
-    Route::post('tickets/satisfied/store', [TicketSatisfactionController::class, 'store'])->name('tickets.satisfied.store');
+    Route::post('tickets/not-satisfied/store', [TicketSatisfactionController::class, 'store'])->name('tickets.notSatisfied.store');
+    Route::post('tickets/satisfied/store', [TicketSatisfactionController::class, 'update'])->name('tickets.satisfied.update');
 
     Route::get('tickets/assign/index/{employee_id}/{id}', [TicketAssignController::class, 'index'])->name('tickets.assign.index');
     Route::post('tickets/assign/store', [TicketAssignController::class, 'store'])->name('tickets.assign.store');
