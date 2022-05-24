@@ -49,16 +49,15 @@ class CustomerManagementController extends Controller
             })->reject(function ($ticket) use ($now) {
                 return $now->lte($ticket->expiry_at);
             })->map(function ($expiredTicket) {
-                TicketAssignController::assignTicketToEmployee($expiredTicket->id, CustomerManagementController::getEmployeeWithoutLast());
-                ManagementHierarchyController::createTicketInHierarchy($expiredTicket);
+                ManagementHierarchie::createTicketInHierarchy($expiredTicket);
+                CustomerManagement::assignTicketToAnotherEmployee($expiredTicket->id, CustomerManagement::getEmployeeWithoutLast());
             });
         }
 
         return view('tickets.index', ['cards' => $tickets,]);
     }
 
-    public
-    function store(StoreTicketRequest $request)
+    public function store(StoreTicketRequest $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -68,13 +67,12 @@ class CustomerManagementController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        $this->assignTicketToEmployee($ticket, $request);
+        CustomerManagement::assignTicketToEmployee($ticket, $request);
 
         return redirect()->route('tickets.index');
     }
 
-    public
-    function create()
+    public function create()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -83,62 +81,11 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-    public
-    function show($id)
+    public function show($id)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('tickets.show');
-    }
-
-    /**
-     *
-     * Delivers the employee (id) who has the fewest open tickets
-     *
-     * @return integer
-     */
-    public static function getEmployeeWithoutLast(): int
-    {
-        $employee =
-            CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
-                ->where('closed', 0)
-                ->groupBy('fk_employee_id')
-                ->orderBy('numberOfOpenTickets')
-                ->first();
-
-        return $employee->fk_employee_id;
-    }
-
-    private function assignTicketToEmployee($ticket, StoreTicketRequest $request): void
-    {
-        $time = Carbon::now();
-
-        CustomerManagement::create([
-            'fk_ticket_id' => $ticket->id,
-            'fk_customer_id' => session('customer_id'),
-            'fk_employee_id' => CustomerManagementController::getEmployeeWithoutLast(),
-            'fk_keyword_id' => $request->input('id'),
-            'closed' => 0,
-            'assignment_at' => $time->format('Y-m-d H:i:s'),
-            'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
-        ]);
-    }
-
-    public static function delete($id)
-    {
-        CustomerManagement::where('id', $id)->delete();
-    }
-
-    public static function find($id, $withTrashed = false)
-    {
-        return $withTrashed ? CustomerManagement::withTrashed()->find($id) : CustomerManagement::find($id);
-    }
-
-    public static function update($id, $columnName, $value)
-    {
-        CustomerManagement::where('id', $id)->update([
-            $columnName => $value,
-        ]);
     }
 
 }

@@ -28,6 +28,7 @@ class TicketSatisfactionController extends Controller
         $request->validate([
             'comment' => ['required', 'min:5', 'max:3000'],
         ]);
+
         $time = Carbon::now();
 
         CustomerManagement::where('id', $request->id)->update([
@@ -35,10 +36,13 @@ class TicketSatisfactionController extends Controller
             'comment' => $request->comment,
             'replied_at' => $time->format('Y-m-d H:i:s'),
         ]);
-        $ticket = CustomerManagementController::find($request->id);
-        ManagementHierarchyController::createTicketInHierarchy($ticket);
+
+        $ticket = CustomerManagement::find($request->id);
+
+        ManagementHierarchie::createTicketInHierarchy($ticket);
+
         CustomerManagement::where('id', $request->id)->update([
-            'fk_employee_id' => CustomerManagementController::getEmployeeWithoutLast(),
+            'fk_employee_id' => CustomerManagement::getEmployeeWithoutLast(),
             'closed' => 0,
             'response' => null,
             'satisfied' => null,
@@ -55,10 +59,12 @@ class TicketSatisfactionController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        CustomerManagementController::update($request->id, 'satisfied', 1);
-        CustomerManagementController::delete($request->id);
-        $deletedTicket = CustomerManagementController::find($request->id, true);
-        ManagementHierarchyController::createTicketInHierarchy($deletedTicket);
+        CustomerManagement::where('id', $request->id)->update([
+            'satisfied' => 1,
+        ]);
+        CustomerManagement::where('id', $request->id)->delete();
+        $deletedTicket = CustomerManagement::withTrashed()->find($request->id);
+        ManagementHierarchie::createTicketInHierarchy($deletedTicket);
 
         return redirect()->route('tickets.index');
     }

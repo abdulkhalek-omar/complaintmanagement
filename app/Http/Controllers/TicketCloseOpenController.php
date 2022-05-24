@@ -13,6 +13,8 @@ class TicketCloseOpenController extends Controller
 
     public function index()
     {
+        abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('tickets.close.index', [
             'id' => request('id'),
         ]);
