@@ -28,6 +28,10 @@ class Customer extends Model
         'fk_country_id',
     ];
 
+    protected $dates = [
+        'registered_at'
+    ];
+
 
     public static function getCustomerId($user)
     {

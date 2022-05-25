@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProfileRequest;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Place;
 use App\Models\State;
 use App\Models\User;
@@ -19,9 +20,15 @@ class PersonalInformationController extends Controller
     {
         abort_if(!Gate::denies('admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $user = Auth::user();
+        $personalInfo = null;
 
-        $personalInfo = Customer::getCustomer($user);
+        if (!strcmp(session('role'), 'Employee')) {
+            $personalInfo = Employee::where('id', session('employee_id'))->first();
+        }
+        if (!strcmp(session('role'), 'User')) {
+            $personalInfo = Customer::where('id', session('customer_id'))->first();
+        }
+
         $places = Place::all();
         $states = State::all();
         $countries = Country::all();
@@ -32,28 +39,38 @@ class PersonalInformationController extends Controller
     public function store(StoreProfileRequest $request)
     {
         $validated = $request->validated();
-//        dd($validated);
 
-        Customer::updateOrCreate([
-            'firstname' => $validated['firstname'],
-            'surname' => $validated['surname'],
+        if (!strcmp(session('role'), 'Employee')) {
+            Employee::updateOrCreate(
+                [
+                    'id' => session('employee_id')
+                ],
+                [
+                    'firstname' => $validated['firstname'],
+                    'surname' => $validated['surname'],
 //            'phone_number' => $validated['phone_number'],
-            'street' => $validated['street'],
-            'fk_place_id' => $validated['place_id'],
-            'fk_state_id' => $validated['state_id'],
-            'fk_country_id' => $validated['country_id'],
-        ]);
+                    'street' => $validated['street'],
+                    'fk_place_id' => $validated['place_id'],
+                    'fk_state_id' => $validated['state_id'],
+                    'fk_country_id' => $validated['country_id'],
+                ]);
+        }
+        if (!strcmp(session('role'), 'User')) {
+            Customer::updateOrCreate(
+                [
+                    'id' => session('customer_id')
+                ],
+                [
+                    'firstname' => $validated['firstname'],
+                    'surname' => $validated['surname'],
+//            'phone_number' => $validated['phone_number'],
+                    'street' => $validated['street'],
+                    'fk_place_id' => $validated['place_id'],
+                    'fk_state_id' => $validated['state_id'],
+                    'fk_country_id' => $validated['country_id'],
+                ]);
 
-
-//        Customer::updateOrCreate([
-//            'firstname' =>  $request->input('firstname'),
-//            'surname' =>  $request->input('surname'),
-////            'phone_number' => $validated['phone_number'],
-//            'street' =>  $request->input('street'),
-//            'fk_place_id' =>  $request->input('place_id'),
-//            'fk_state_id' =>  $request->input('state_id'),
-//            'fk_country_id' =>  $request->input('country_id'),
-//        ]);
+        }
 
         return redirect()->route('personal-information.index');
     }

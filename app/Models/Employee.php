@@ -22,6 +22,14 @@ class Employee extends Model
         'surname',
         'firstname',
         'phone_number',
+        'street',
+        'fk_place_id',
+        'fk_state_id',
+        'fk_country_id',
+    ];
+
+    protected $dates = [
+        'registered_at'
     ];
 
     public static function getEmployeeId($user)
