@@ -32,6 +32,12 @@ Installation steps
 1. composer require laravel/fortify
 2. php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
 
+-- Install Laravel Charts
+1. composer require consoletvs/charts:6.*
+2. php artisan vendor:publish --tag=charts_config
+3. <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+4. php artisan make:chart <name>
+
 
 -- Command to: delete-db => migrate-db => set-data-db
 1. php artisan migrate:fresh --seed

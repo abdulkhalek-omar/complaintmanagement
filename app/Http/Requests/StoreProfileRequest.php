@@ -34,13 +34,13 @@ class StoreProfileRequest extends FormRequest
                 'string',
                 'max:100'
             ],
-//            'phone_number' => [
-//                'required',
-//                'string',
-//                'min:8',
-//                'max:100',
+            'phone_number' => [
+                'required',
+                'string',
+                'min:8',
+                'max:100',
 //                'unique:customers,phone_number'
-//            ],
+            ],
             'street' => [
                 'string',
                 'min:5',

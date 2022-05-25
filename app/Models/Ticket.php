@@ -14,4 +14,8 @@ class Ticket extends Model
     protected $fillable = [
         'content',
     ];
+
+    protected $dates = [
+        'created_at'
+    ];
 }

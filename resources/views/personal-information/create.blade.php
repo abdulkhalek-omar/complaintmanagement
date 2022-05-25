@@ -43,7 +43,7 @@
                                          value=" {{ isset($personalInfo->firstname) ? $personalInfo->firstname : '' }} "
                                          autofocus
                             />
-                            <x-jet-input-error for="forename"/>
+                            <x-jet-input-error for="firstname"/>
                         </div>
 
                         <!-- Surname -->
@@ -60,17 +60,17 @@
                         </div>
 
                         <!-- Phone Number -->
-                        {{--                        <div class="mb-3">--}}
-                        {{--                            <x-jet-label for="phone_number" value="{{ __('Phone Number') }}"/>--}}
-                        {{--                            <x-jet-input id="phone_number"--}}
-                        {{--                                         type="text"--}}
-                        {{--                                         class="{{ $errors->has('phone_number') ? 'is-invalid' : '' }}"--}}
-                        {{--                                         name="phone_number"--}}
-                        {{--                                         autocomplete="phone_number"--}}
-                        {{--                                         value="{{$personalInfo->phone_number}}"--}}
-                        {{--                            />--}}
-                        {{--                            <x-jet-input-error for="phone_number"/>--}}
-                        {{--                        </div>--}}
+                        <div class="mb-3">
+                            <x-jet-label for="phone_number" value="{{ __('Phone Number') }}"/>
+                            <x-jet-input id="phone_number"
+                                         type="text"
+                                         class="{{ $errors->has('phone_number') ? 'is-invalid' : '' }}"
+                                         name="phone_number"
+                                         autocomplete="phone_number"
+                                         value="{{$personalInfo->phone_number}}"
+                            />
+                            <x-jet-input-error for="phone_number"/>
+                        </div>
 
 
                         <!-- Street -->

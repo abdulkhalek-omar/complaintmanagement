@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerManagementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PersonalInformationController;
 use App\Http\Controllers\TicketAssignController;
 use App\Http\Controllers\TicketCloseOpenController;
@@ -27,9 +28,9 @@ Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => '\App\Http\Controlle
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     });
 
 Route::group(['middleware' => 'auth'], function () {
