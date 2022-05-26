@@ -38,8 +38,6 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // to active => @can | Gate::denies('') | Gate::allows('')
             \App\Http\Middleware\AuthGates::class,
-            // to active multi-languages And Localization
-            \App\Http\Middleware\Language::class,
         ],
 
         'api' => [
@@ -67,5 +65,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'user.session' => \App\Http\Middleware\UserSession::class,
     ];
 }

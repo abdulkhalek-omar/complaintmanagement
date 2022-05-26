@@ -15,13 +15,13 @@ return new class extends Migration {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('fk_user_id')->nullable()->unique()->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('surname');
-            $table->string('firstname');
+            $table->string('surname')->nullable();
+            $table->string('firstname')->nullable();
             $table->string('phone_number', 30)->nullable()->unique();
             $table->string('street', '150')->nullable();
-            $table->foreignId('fk_place_id')->references('id')->on('Places')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('fk_state_id')->references('id')->on('States')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('fk_country_id')->references('id')->on('Countries')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('fk_place_id')->nullable()->references('id')->on('Places')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('fk_state_id')->nullable()->references('id')->on('States')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('fk_country_id')->nullable()->references('id')->on('Countries')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamp('hired_at')->useCurrent();
         });
     }

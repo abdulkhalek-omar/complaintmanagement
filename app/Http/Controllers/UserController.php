@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +36,18 @@ class UserController extends Controller
         $user = User::create($request->validated());
         $user->roles()->sync($request->input('roles', []));
 
+        if ($request->roles[0] == 2) {
+            Employee::create([
+                'fk_user_id' => $user->id
+            ]);
+        }
+
+        if ($request->roles[0] == 3){
+            Customer::create([
+                'fk_user_id' => $user->id
+            ]);
+        }
+
         return redirect()->route('users.index');
     }
 
@@ -57,6 +71,8 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
+        abort_if(Gate::denies('admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->update($request->validated());
         $user->roles()->sync($request->input('roles', []));
 

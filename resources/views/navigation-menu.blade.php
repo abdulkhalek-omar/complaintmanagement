@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom sticky-top">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand me-4" href="/">
-            <x-jet-application-mark width="36"/>
-        </a>
+{{--        <a class="navbar-brand me-4" href="/">--}}
+{{--            <x-jet-application-mark width="36"/>--}}
+{{--        </a>--}}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -34,39 +34,6 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav align-items-baseline">
-
-                <!-- Languages Selector -->
-                <x-jet-dropdown id="navbarDropdownMenuLink">
-                    <x-slot name="trigger">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ Config::get('languages')[App::getLocale()] }}
-                        </a>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            @foreach (Config::get('languages') as $lang => $language)
-                                @if ($lang != App::getLocale())
-                                    <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"> {{$language}}</a>
-                                @endif
-                            @endforeach
-                        </div>
-                    </x-slot>
-
-                </x-jet-dropdown>
-{{--                https://www.youtube.com/watch?v=po4Xt1G3gcc&ab_channel=5Balloons--}}
-{{--                <li class="nav-item dropdown">--}}
-{{--                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-{{--                        {{ Config::get('languages')[App::getLocale()] }}--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">--}}
-{{--                        @foreach (Config::get('languages') as $lang => $language)--}}
-{{--                            @if ($lang != App::getLocale())--}}
-{{--                                <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"> {{$language}}</a>--}}
-{{--                            @endif--}}
-{{--                        @endforeach--}}
-{{--                    </div>--}}
-{{--                </li>--}}
 
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
@@ -141,6 +108,12 @@
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
+
+                            @cannot('admin_access')
+                            <x-jet-dropdown-link href="{{ route('personal-information.index') }}">
+                                {{ __('Personal information') }}
+                            </x-jet-dropdown-link>
+                            @endcan
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">

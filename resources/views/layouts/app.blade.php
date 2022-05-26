@@ -18,6 +18,10 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 
+    <!-- Charting library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+
+
 </head>
 <body class="font-sans antialiased bg-light">
 <x-jet-banner/>

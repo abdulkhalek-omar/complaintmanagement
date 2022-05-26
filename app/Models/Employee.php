@@ -22,11 +22,22 @@ class Employee extends Model
         'surname',
         'firstname',
         'phone_number',
+        'street',
+        'fk_place_id',
+        'fk_state_id',
+        'fk_country_id',
+    ];
+
+    protected $dates = [
+        'registered_at'
     ];
 
     public static function getEmployeeId($user)
     {
-        return Employee::select('employees.id')->where('employees.fk_user_id', $user->id)->first()->id;
+        if (!session()->has('employee_id')) {
+            $employee_id = Employee::select('employees.id')->where('employees.fk_user_id', $user->id)->first()->id;
+            session(['employee_id' => $employee_id]);
+        }
     }
 
 //

@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\CustomerManagement;
 use App\Models\Employee;
 use App\Models\Keyword;
+use App\Models\ManagementHierarchie;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,41 +18,45 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerManagementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     */
+    public function __construct()
+    {
+        $this->middleware('user.session');
+    }
+
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $role = null;
         $tickets = null;
-        $user = Auth::user();
 
-        foreach ($user->roles as $item) {
-            $role = $item['title'];
-        }
-
-        if (!strcmp($role, 'User')) {
-            $tickets = CustomerManagement::where('fk_customer_id', Customer::getCustomerId($user))->orderBy('closed')->get();
-        }
-        if (!strcmp($role, 'Employee')) {
-            $tickets = CustomerManagement::where('fk_employee_id', Employee::getEmployeeId($user))->orderBy('closed')->get();
-        }
-        if (!strcmp($role, 'Admin')) {
-            $tickets = CustomerManagement::all()->sortBy('closed');
+        if (!is_null(session('customer_id'))) {
+            $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
         }
 
-        return view('tickets.index', [
-            'cards' => $tickets,
-        ]);
+        if (!is_null(session('employee_id'))) {
+            $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
+        }
+
+        if (!strcmp(session('role'), 'Admin')) {
+            $tickets = CustomerManagement::all()->sortBy('closed')->sortByDesc('assignment_at');
+        }
+
+        if (!is_null($tickets)) {
+            $now = Carbon::now();
+
+            $tickets->reject(function ($ticket) {
+                return $ticket->closed === 1;
+            })->reject(function ($ticket) use ($now) {
+                return $now->lte($ticket->expiry_at);
+            })->map(function ($expiredTicket) {
+                ManagementHierarchie::createTicketInHierarchy($expiredTicket);
+                CustomerManagement::assignTicketToAnotherEmployee($expiredTicket->id, CustomerManagement::getEmployeeWithoutLast($expiredTicket->fk_employee_id));
+            });
+        }
+
+        return view('tickets.index', ['cards' => $tickets,]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     */
     public function store(StoreTicketRequest $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -62,9 +67,7 @@ class CustomerManagementController extends Controller
             'content' => $request->input('content'),
         ]);
 
-        $user = Auth::user();
-
-        $this->assignTicketToEmployee($ticket, $request, $user);
+        CustomerManagement::assignTicketToEmployee($ticket, $request);
 
         return redirect()->route('tickets.index');
     }
@@ -78,10 +81,6 @@ class CustomerManagementController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     */
     public function show($id)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -89,67 +88,4 @@ class CustomerManagementController extends Controller
         return view('tickets.show');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     */
-    public function update(Request $request, $id)
-    {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     */
-    public function destroy($id)
-    {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-    }
-
-
-    /**
-     *
-     * Delivers the employee (id) who has the fewest open tickets
-     *
-     * @return integer
-     */
-    private function getEmployeeWithoutLast()
-    {
-//        $employees = CustomerManagement::orderBy('fk_employee_id')->get()
-//            ->groupBy(function ($data) {
-//            return $data->fk_employee_id;
-//        })->map(function ($numberOfOpenTickets){
-//            return $numberOfOpenTickets->count();
-//        });
-        $employee =
-            CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
-                ->where('closed', 0)
-                ->groupBy('fk_employee_id')
-                ->orderBy('numberOfOpenTickets', 'ASC')
-                ->first();
-        return $employee->fk_employee_id;
-    }
-
-    /**
-     * @param $ticket
-     * @param StoreTicketRequest $request
-     * @return void
-     */
-    private function assignTicketToEmployee($ticket, StoreTicketRequest $request, $user): void
-    {
-        $time = Carbon::now();
-
-        CustomerManagement::create([
-            'fk_ticket_id' => $ticket->id,
-            'fk_customer_id' => Customer::getCustomerId($user),
-            'fk_employee_id' => $this->getEmployeeWithoutLast(),
-            'fk_keyword_id' => $request->input('id'),
-            'closed' => 0,
-            'assignment_at' => $time->format('Y-m-d H:i:s'),
-            'expiry_at' => $time->addDays(3)->format('Y-m-d H:i:s'),
-        ]);
-    }
 }

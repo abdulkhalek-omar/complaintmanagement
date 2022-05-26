@@ -14,30 +14,35 @@
 
 1. Frameworks:
     - Laravel 9.x
-    - vuetify v.2.6.4
-    - Fontawesome v5.15.4
+    - Bootstrap v5.0
+    - JavaScript
 
+2. Libraries:
+   - Laravel fortify
+   - Laravel JetStream
+   - Laravel Charts
+   - Laravel Livewire
 
-2. Programmiersprachen:
+3. Programmiersprachen:
     - PHP 8.0
     - JavaScript
 
-3. Datenbank und Serve
+4. Datenbank und Serve
     - Apache
     - MariaDB
 
-4. Projektplanung:
+5. Projektplanung:
     - Visual Studio Paradigma
 
-5. Projektmanagement:
+6. Projektmanagement:
     - GitHub
     - SourceTree
 
-6. Entwicklungsumgebung
+7. Entwicklungsumgebung
     - PhpStorm
     - Visual Studio Code
 
-7. sonstiges:
+8. sonstiges:
     - HTML5
     - CSS
 
