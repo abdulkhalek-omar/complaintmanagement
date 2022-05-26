@@ -49,8 +49,8 @@ if ($card->closed){
             </div>
             <div class="card-footer {{$footer_color}}">
                 <div>{{__('Assigned to')}}: {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
-                {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
-                {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
+                {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
+                {{__('Expiration')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
             </div>
         </div>
     </div>
@@ -59,7 +59,6 @@ if ($card->closed){
     <div class="col-lg-4 mb-5 d-flex align-items-stretch">
         <div class="card {{$card_color}}">
             <div class="card-body d-flex flex-column">
-                {{--                <h5 class="card-title">{{__('Created by')}}: {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>--}}
                 <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
 
                 @if($card->closed)
@@ -87,8 +86,8 @@ if ($card->closed){
             <div class="card-footer {{$footer_color}}">
                 @if(!$card->closed)
                     <div>{{__('Assigned to')}}: {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
-                    {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
-                    {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
+                    {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
+                    {{__('Expiration')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                 @else
                     {{__($card->response)}}
                     <div class="mt-2">{{__('Answer from Employee')}}

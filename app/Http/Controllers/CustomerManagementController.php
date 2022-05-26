@@ -30,15 +30,15 @@ class CustomerManagementController extends Controller
         $tickets = null;
 
         if (!is_null(session('customer_id'))) {
-            $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->get();
+            $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
         }
 
         if (!is_null(session('employee_id'))) {
-            $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->get();
+            $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
         }
 
         if (!strcmp(session('role'), 'Admin')) {
-            $tickets = CustomerManagement::all()->sortBy('closed');
+            $tickets = CustomerManagement::all()->sortBy('closed')->sortByDesc('assignment_at');
         }
 
         if (!is_null($tickets)) {
@@ -50,7 +50,7 @@ class CustomerManagementController extends Controller
                 return $now->lte($ticket->expiry_at);
             })->map(function ($expiredTicket) {
                 ManagementHierarchie::createTicketInHierarchy($expiredTicket);
-                CustomerManagement::assignTicketToAnotherEmployee($expiredTicket->id, CustomerManagement::getEmployeeWithoutLast());
+                CustomerManagement::assignTicketToAnotherEmployee($expiredTicket->id, CustomerManagement::getEmployeeWithoutLast($expiredTicket->fk_employee_id));
             });
         }
 

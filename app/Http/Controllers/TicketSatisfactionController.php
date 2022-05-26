@@ -42,7 +42,7 @@ class TicketSatisfactionController extends Controller
         ManagementHierarchie::createTicketInHierarchy($ticket);
 
         CustomerManagement::where('id', $request->id)->update([
-            'fk_employee_id' => CustomerManagement::getEmployeeWithoutLast(),
+            'fk_employee_id' => CustomerManagement::getEmployeeWithoutLast($ticket->fk_employee_id),
             'closed' => 0,
             'response' => null,
             'satisfied' => null,

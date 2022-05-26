@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\CreatedTicketsByCustomerChart;
 use App\Charts\OpenTicketsNumberChart;
 use App\Charts\TicketNumberChart;
 use App\Charts\TicketsAssignedMeChart;
@@ -9,7 +10,6 @@ use App\Models\Customer;
 use App\Models\CustomerManagement;
 use App\Models\Ticket;
 use App\Charts\CustomerNumberChart;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +31,9 @@ class DashboardController extends Controller
 
         $openTicketsNumberChart = null;
         $ticketsAssignedMeChart = null;
+
+        $createdTicketsByCustomerChart = null;
+        $satisfiedTicketsByCustomerChart = null;
 
 
         if (!strcmp(session('role'), 'Admin')) {
@@ -194,75 +197,93 @@ class DashboardController extends Controller
         }
 
         if (!strcmp(session('role'), 'User')) {
-//
-//            $today_3_days_ago = today()->subDays(3);
-//            $today_6_days_ago = today()->subDays(6);
-//            $today_9_days_ago = today()->subDays(9);
-//
-//
-//            $openTicketsNumberChart = new OpenTicketsNumberChart;
-//
-//            $three_days_tickets = CustomerManagement::
-//            where('closed', 0)
-//                ->where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', today())
-//                ->whereDate('assignment_at', '>=', $today_3_days_ago)
-//                ->count();
-//
-//            $six_days_tickets = CustomerManagement::
-//            where('closed', 0)
-//                ->where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', $today_3_days_ago)
-//                ->whereDate('assignment_at', '>=', $today_6_days_ago)
-//                ->count();
-//
-//            $nine_days_tickets = CustomerManagement::
-//            where('closed', 0)
-//                ->where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', $today_6_days_ago)
-//                ->whereDate('assignment_at', '>=', $today_9_days_ago)
-//                ->count();
-//
-//            $openTicketsNumberChart->labels([
-//                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
-//                $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
-//                $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
-//            ]);
-//            $openTicketsNumberChart->dataset('Open tickets within the time slots', 'bar', [$three_days_tickets, $six_days_tickets, $nine_days_tickets]);
-//
-//
-//            $ticketsAssignedMeChart = new TicketsAssignedMeChart;
-//
-//            $three_days_tickets = CustomerManagement::
-//            where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', today())
-//                ->whereDate('assignment_at', '>=', $today_3_days_ago)
-//                ->withTrashed()
-//                ->count();
-//
-//            $six_days_tickets = CustomerManagement::
-//            where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', $today_3_days_ago)
-//                ->whereDate('assignment_at', '>=', $today_6_days_ago)
-//                ->withTrashed()
-//                ->count();
-//
-//            $nine_days_tickets = CustomerManagement::
-//            where('fk_employee_id', session('employee_id'))
-//                ->whereDate('assignment_at', '<=', $today_6_days_ago)
-//                ->whereDate('assignment_at', '>=', $today_9_days_ago)
-//                ->withTrashed()
-//                ->count();
-//
-//            $ticketsAssignedMeChart->labels([
-//                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
-//                $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
-//                $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
-//            ]);
-//            $ticketsAssignedMeChart->dataset('Tickets assigned to me within the time slots', 'bar', [$three_days_tickets, $six_days_tickets, $nine_days_tickets]);
+
+            $today_3_days_ago = today()->subDays(3);
+            $today_6_days_ago = today()->subDays(6);
+            $today_9_days_ago = today()->subDays(9);
+
+            $three_days_created_tickets = Cache::remember('three_days_created_tickets', now()->endOfDay(), function () use ($today_3_days_ago) {
+                return CustomerManagement::
+                where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '>=', $today_3_days_ago)
+                    ->count();
+            });
+
+
+            $six_days_created_tickets = Cache::remember('six_days_created_tickets', now()->endOfDay(), function () use ($today_3_days_ago, $today_6_days_ago) {
+                return CustomerManagement::
+                where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', $today_3_days_ago)
+                    ->whereDate('assignment_at', '>=', $today_6_days_ago)
+                    ->count();
+            });
+
+            $nine_days_created_tickets = Cache::remember('nine_days_created_tickets', now()->endOfDay(), function () use ($today_6_days_ago, $today_9_days_ago) {
+                return CustomerManagement::
+                where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', $today_6_days_ago)
+                    ->whereDate('assignment_at', '>=', $today_9_days_ago)
+                    ->count();
+            });
+
+            $createdTicketsByCustomerChart = new CreatedTicketsByCustomerChart;
+
+            $createdTicketsByCustomerChart->labels([
+                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
+                $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
+            ]);
+            $createdTicketsByCustomerChart->dataset('The tickets that I created in the respective time periods', 'bar', [$three_days_created_tickets, $six_days_created_tickets, $nine_days_created_tickets]);
+
+
+            $three_days_satisfied_tickets = Cache::remember('three_days_satisfied_tickets', now()->endOfDay(), function () use ($today_3_days_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '>=', $today_3_days_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+
+            $six_days_satisfied_tickets = Cache::remember('six_days_satisfied_tickets', now()->endOfDay(), function () use ($today_3_days_ago, $today_6_days_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', $today_3_days_ago)
+                    ->whereDate('assignment_at', '>=', $today_6_days_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+
+            $nine_days_satisfied_tickets = Cache::remember('nine_days_satisfied_tickets', now()->endOfDay(), function () use ($today_6_days_ago, $today_9_days_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->where('fk_customer_id', session('customer_id'))
+                    ->whereDate('assignment_at', '<=', $today_6_days_ago)
+                    ->whereDate('assignment_at', '>=', $today_9_days_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+            $satisfiedTicketsByCustomerChart = new CreatedTicketsByCustomerChart;
+
+            $satisfiedTicketsByCustomerChart->labels([
+                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
+                $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
+            ]);
+            $satisfiedTicketsByCustomerChart->dataset('The tickets I was satisfied with in the respective time periods', 'bar', [$three_days_satisfied_tickets, $six_days_satisfied_tickets, $nine_days_satisfied_tickets]);
 
         }
 
-        return view('dashboard', compact('customerNumberChart', 'ticketsNumberChart', 'openTicketsNumberChart', 'ticketsAssignedMeChart'));
+        return view('dashboard', compact(
+            'customerNumberChart', 'ticketsNumberChart',
+            'openTicketsNumberChart', 'ticketsAssignedMeChart',
+            'createdTicketsByCustomerChart', 'satisfiedTicketsByCustomerChart'
+        ));
     }
 }

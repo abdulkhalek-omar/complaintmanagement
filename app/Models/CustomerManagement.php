@@ -66,9 +66,16 @@ class CustomerManagement extends Model
      *
      * @return integer
      */
-    public static function getEmployeeWithoutLast(): int
+    public static function getEmployeeWithoutLast($fk_employee_id = -1): int
     {
-        $employee =
+        $employee = ($fk_employee_id !== -1) ?
+            CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
+                ->where('closed', 0)
+                ->where('fk_employee_id', '!=', $fk_employee_id)
+                ->groupBy('fk_employee_id')
+                ->orderBy('numberOfOpenTickets')
+                ->first()
+            :
             CustomerManagement::select(DB::raw('fk_employee_id, COUNT(*) as numberOfOpenTickets'))
                 ->where('closed', 0)
                 ->groupBy('fk_employee_id')

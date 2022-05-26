@@ -6,8 +6,8 @@
     </x-slot>
 
     @cannot('employee_access')
-        <div class="container bg-white pt-3 pb-3 mb-5">
-            <div class="row">
+{{--        <div class="container bg-white pt-3 pb-3 mb-5">--}}
+{{--            <div class="row">--}}
 
                 <div class="col-lg-4">
                     <a href="{{ route('tickets.create') }}"
@@ -16,13 +16,12 @@
                     </a>
                 </div>
 
-                <div class="col-lg-4">
+{{--                <div class="col-lg-4">--}}
 
-                </div>
-
-
-            </div>
-        </div>
+{{--                </div>--}}
+{{--                --}}
+{{--            </div>--}}
+{{--        </div>--}}
     @endcan
 
 
@@ -69,8 +68,8 @@
                                 <div class="card-footer {{$footer_color}}">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
-                                    {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
-                                    {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
+                                    {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
+                                    {{__('Expiration')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                                 </div>
                             </div>
                         </div>
@@ -135,8 +134,8 @@
                                 <div class="card-footer {{$footer_color}}">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
-                                    {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
-                                    {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
+                                    {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
+                                    {{__('Expiration')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                                 </div>
                             </div>
                         </div>
@@ -150,8 +149,8 @@
                                 <div class="card-footer {{$footer_color}}">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
-                                    {{__('Assigned at')}}: {{ $card->assignment_at->diffForHumans() }} <br>
-                                    {{__('Expiry at')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
+                                    {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
+                                    {{__('Expiration')}}: {{ $card->expiry_at->diffForHumans($card->assignment_at) }}
                                 </div>
                             </div>
                         </div>
