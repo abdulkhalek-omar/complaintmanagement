@@ -14,6 +14,8 @@
 
 1. Frameworks:
     - Laravel 9.x
+    - Laravel JetStream
+    - Laravel Fortify
     - Bootstrap v5.0
     - JavaScript
 
@@ -23,26 +25,26 @@
    - Laravel Charts
    - Laravel Livewire
 
-3. Programmiersprachen:
+2. Programmiersprachen:
     - PHP 8.0
     - JavaScript
 
-4. Datenbank und Serve
+3. Datenbank und Serve
     - Apache
     - MariaDB
 
-5. Projektplanung:
+4. Projektplanung:
     - Visual Studio Paradigma
 
-6. Projektmanagement:
+5. Projektmanagement:
     - GitHub
     - SourceTree
 
-7. Entwicklungsumgebung
+6. Entwicklungsumgebung
     - PhpStorm
     - Visual Studio Code
 
-8. sonstiges:
+7. sonstiges:
     - HTML5
     - CSS
 
