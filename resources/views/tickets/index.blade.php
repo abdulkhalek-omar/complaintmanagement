@@ -6,22 +6,12 @@
     </x-slot>
 
     @cannot('employee_access')
-{{--        <div class="container bg-white pt-3 pb-3 mb-5">--}}
-{{--            <div class="row">--}}
-
                 <div class="col-lg-4">
                     <a href="{{ route('tickets.create') }}"
                        class="btn btn-outline-success mb-3">
                         {{ __('Submit a Complaint') }}
                     </a>
                 </div>
-
-{{--                <div class="col-lg-4">--}}
-
-{{--                </div>--}}
-{{--                --}}
-{{--            </div>--}}
-{{--        </div>--}}
     @endcan
 
 
@@ -30,16 +20,9 @@
             @foreach($cards as $card)
 
                 @if($card->closed)
-                    @php
-                        $card_color               = "text-white bg-success";
-                        $btn_color                = "btn btn-outline-dark";
-                        $footer_color             = "text-info";
-                        $btn_text                 = "Open Ticket";
-                    @endphp
-
                     @canany(['employee_access', 'admin_access'])
                         <div class="col-lg-4 mb-5 d-flex align-items-stretch">
-                            <div class="card {{$card_color}}">
+                            <div class="card text-white bg-success">
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">{{__('Created by')}}
                                         : {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>
@@ -49,7 +32,7 @@
                                         @csrf
                                         <input name="id" value="{{$card->id}}" hidden/>
                                         <button type="submit"
-                                                class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ __($btn_text) }}</button>
+                                                class="btn btn-outline-dark mt-auto align-self-start form-control">{{ __('Open Ticket') }}</button>
                                     </form>
 
                                     @can('admin_access')
@@ -65,7 +48,7 @@
                                     @endcan
 
                                 </div>
-                                <div class="card-footer {{$footer_color}}">
+                                <div class="card-footer text-info">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                                     {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
@@ -76,18 +59,16 @@
 
                     @elsecan('user_access')
                         <div class="col-lg-4 mb-5 d-flex align-items-stretch">
-                            <div class="card {{$card_color}}">
+                            <div class="card text-white bg-success">
                                 <div class="card-body d-flex flex-column">
-                                    {{--                <h5 class="card-title">{{__('Created by')}}: {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>--}}
                                     <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
-
 
                                     @include('tickets.satisfied.update')
 
                                     @include('tickets.satisfied.get')
 
                                 </div>
-                                <div class="card-footer {{$footer_color}}">
+                                <div class="card-footer text-info">
                                     {{__($card->response)}}
                                     <div class="mt-2">{{__('Answer from Employee')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
@@ -97,16 +78,9 @@
                     @endcan
 
                 @else
-                    @php
-                        $card_color               = "text-white bg-dark";
-                        $btn_color                = "btn btn-outline-secondary";
-                        $footer_color             = "text-muted";
-                        $btn_text                 = "Close Ticket";
-                    @endphp
-
                     @canany(['employee_access', 'admin_access'])
                         <div class="col-lg-4 mb-5 d-flex align-items-stretch">
-                            <div class="card {{$card_color}}">
+                            <div class="card text-white bg-dark">
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">{{__('Created by')}}
                                         : {{ $card->customer->surname }} {{ $card->customer->firstname }}</h5>
@@ -116,7 +90,7 @@
                                           method="GET">
                                         @csrf
                                         <button type="submit"
-                                                class="{{$btn_color . ' mt-auto align-self-start form-control'}}">{{ __($btn_text) }}</button>
+                                                class="btn btn-outline-secondary mt-auto align-self-start form-control">{{ __('Close Ticket') }}</button>
                                     </form>
 
                                     @can('admin_access')
@@ -131,7 +105,7 @@
                                     @endcan
 
                                 </div>
-                                <div class="card-footer {{$footer_color}}">
+                                <div class="card-footer text-muted">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                                     {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>
@@ -142,11 +116,11 @@
 
                     @elsecan('user_access')
                         <div class="col-lg-4 mb-5 d-flex align-items-stretch">
-                            <div class="card {{$card_color}}">
+                            <div class="card text-white bg-dark">
                                 <div class="card-body d-flex flex-column">
                                     <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
                                 </div>
-                                <div class="card-footer {{$footer_color}}">
+                                <div class="card-footer text-muted}">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                                     {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>

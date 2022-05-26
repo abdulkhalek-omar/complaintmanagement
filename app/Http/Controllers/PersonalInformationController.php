@@ -38,6 +38,8 @@ class PersonalInformationController extends Controller
 
     public function store(StoreProfileRequest $request)
     {
+        abort_if(!Gate::denies('admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $validated = $request->validated();
 
         if (!strcmp(session('role'), 'Employee')) {
@@ -48,7 +50,7 @@ class PersonalInformationController extends Controller
                 [
                     'firstname' => $validated['firstname'],
                     'surname' => $validated['surname'],
-//            'phone_number' => $validated['phone_number'],
+                    'phone_number' => $validated['phone_number'],
                     'street' => $validated['street'],
                     'fk_place_id' => $validated['place_id'],
                     'fk_state_id' => $validated['state_id'],
@@ -63,7 +65,7 @@ class PersonalInformationController extends Controller
                 [
                     'firstname' => $validated['firstname'],
                     'surname' => $validated['surname'],
-//            'phone_number' => $validated['phone_number'],
+                    'phone_number' => $validated['phone_number'],
                     'street' => $validated['street'],
                     'fk_place_id' => $validated['place_id'],
                     'fk_state_id' => $validated['state_id'],

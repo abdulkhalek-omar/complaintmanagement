@@ -33,8 +33,6 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-//        dd($request->roles[0] == 2);
-
         $user = User::create($request->validated());
         $user->roles()->sync($request->input('roles', []));
 
@@ -73,6 +71,8 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
+        abort_if(Gate::denies('admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user->update($request->validated());
         $user->roles()->sync($request->input('roles', []));
 
