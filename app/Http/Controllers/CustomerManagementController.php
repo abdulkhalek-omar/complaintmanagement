@@ -10,9 +10,6 @@ use App\Models\Keyword;
 use App\Models\ManagementHierarchie;
 use App\Models\Ticket;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 

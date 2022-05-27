@@ -22,14 +22,15 @@
    - Laravel JetStream
    - Laravel Charts
    - Laravel Livewire
+   - Font Awesome
 
 3. Programmiersprachen:
     - PHP 8.0
     - JavaScript
 
-4. Datenbank und Serve
+4. Datenbank und Server
     - Apache
-    - MariaDB
+    - MySQL
 
 5. Projektplanung:
     - Visual Studio Paradigma

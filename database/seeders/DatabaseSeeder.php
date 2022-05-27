@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
         Ticket::factory(50)->create();
         Department::factory(50)->create();
         Employee::factory(50)->create();
-        Keyword::factory(50)->create();
+//        Keyword::factory(3)->create();
         CustomerManagement::factory(50)->create();
         EmployeeManagement::factory(50)->create();
         ManagementHierarchie::factory(50)->create();
