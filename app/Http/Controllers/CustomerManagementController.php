@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
-use App\Models\Customer;
 use App\Models\CustomerManagement;
-use App\Models\Employee;
 use App\Models\Keyword;
-use App\Models\ManagementHierarchie;
-use App\Models\Ticket;
-use Carbon\Carbon;
+use App\Services\TicketService;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,49 +16,22 @@ class CustomerManagementController extends Controller
         $this->middleware('user.session');
     }
 
-    public function index()
+    public function index(TicketService $ticketService)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $tickets = null;
+        $tickets = $ticketService->getTickets();
 
-        if (!is_null(session('customer_id'))) {
-            $tickets = CustomerManagement::where('fk_customer_id', session('customer_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
-        }
+        $ticketService->automaticallyNewAssignment($tickets);
 
-        if (!is_null(session('employee_id'))) {
-            $tickets = CustomerManagement::where('fk_employee_id', session('employee_id'))->orderBy('closed')->orderByDesc('assignment_at')->get();
-        }
-
-        if (!strcmp(session('role'), 'Admin')) {
-            $tickets = CustomerManagement::all()->sortBy('closed')->sortByDesc('assignment_at');
-        }
-
-        if (!is_null($tickets)) {
-            $now = Carbon::now();
-
-            $tickets->reject(function ($ticket) {
-                return $ticket->closed === 1;
-            })->reject(function ($ticket) use ($now) {
-                return $now->lte($ticket->expiry_at);
-            })->map(function ($expiredTicket) {
-                ManagementHierarchie::createTicketInHierarchy($expiredTicket);
-                CustomerManagement::assignTicketToAnotherEmployee($expiredTicket->id, CustomerManagement::getEmployeeWithoutLast($expiredTicket->fk_employee_id));
-            });
-        }
-
-        return view('tickets.index', ['cards' => $tickets,]);
+        return view('tickets.index', ['cards' => $tickets]);
     }
 
-    public function store(StoreTicketRequest $request)
+    public function store(StoreTicketRequest $request, TicketService $ticketService)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $request->validated();
-
-        $ticket = Ticket::create([
-            'content' => $request->input('content'),
-        ]);
+        $ticket = $ticketService->createTicket($request);
 
         CustomerManagement::assignTicketToEmployee($ticket, $request);
 
