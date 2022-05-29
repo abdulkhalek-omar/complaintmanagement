@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @livewireStyles
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{URL::asset('fonts/fontawesome/css/all.min.css')}}"/>
+
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 

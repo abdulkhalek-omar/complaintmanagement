@@ -17,8 +17,20 @@ class KeywordSeeder extends Seeder
     {
         $keywords = [
             [
-                'id' => 0,
+                'id' => 1,
                 'keyword' => 'Choose ...',
+            ],
+            [
+                'id' => 2,
+                'keyword' => 'Technical Problem',
+            ],
+            [
+                'id' => 3,
+                'keyword' => 'Malfunction',
+            ],
+            [
+                'id' => 4,
+                'keyword' => 'Contract problem',
             ],
         ];
 

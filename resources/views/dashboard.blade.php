@@ -6,6 +6,38 @@
     </x-slot>
 
     @if(!strcmp(session('role'), 'Admin'))
+
+        <div class="card-group justify-content-center">
+            <div class="card text-white bg-primary mb-3 me-3" style="max-width: 18rem;">
+                <div class="card-header"><i class="fa fa-solid fa-users fa-2x"></i> Number of Customer</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{$numberOfCustomer}}</h5>
+                    <p class="card-text">All Customer who are in the system </p>
+                </div>
+            </div>
+            <div class="card text-white bg-secondary mb-3 me-3" style="max-width: 18rem;">
+                <div class="card-header"><i class="fas fa-users-cog fa-2x"></i> Number of Employee</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{$numberOfEmployee}}</h5>
+                    <p class="card-text">All employees in the application</p>
+                </div>
+            </div>
+            <div class="card text-white bg-success mb-3 me-3" style="max-width: 18rem;">
+                <div class="card-header"><i class="fa fa-solid fa-user-secret fa-2x"></i> Number of Admin</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{$numberOfAdmin}}</h5>
+                    <p class="card-text">All admin in the application</p>
+                </div>
+            </div>
+            <div class="card text-white bg-danger mb-3 me-3" style="max-width: 18rem;">
+                <div class="card-header"><i class="fa fas fa-id-card-alt fa-2x"></i> Number of Tickets</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{$numberOfTickets}}</h5>
+                    <p class="card-text">All tickets that have been created</p>
+                </div>
+            </div>
+        </div>
+
         @if(!is_null($customerNumberChart) ||!is_null($ticketsNumberChart))
             <div>
                 {!! $customerNumberChart->container() !!}

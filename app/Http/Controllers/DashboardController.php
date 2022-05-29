@@ -8,8 +8,10 @@ use App\Charts\TicketNumberChart;
 use App\Charts\TicketsAssignedMeChart;
 use App\Models\Customer;
 use App\Models\CustomerManagement;
+use App\Models\Employee;
 use App\Models\Ticket;
 use App\Charts\CustomerNumberChart;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +37,18 @@ class DashboardController extends Controller
         $createdTicketsByCustomerChart = null;
         $satisfiedTicketsByCustomerChart = null;
 
+        $numberOfEmployee = null;
+        $numberOfCustomer = null;
+        $numberOfAdmin = null;
+        $numberOfTickets = null;
+
 
         if (!strcmp(session('role'), 'Admin')) {
+            $numberOfEmployee = Employee::all()->count();
+            $numberOfCustomer = Customer::all()->count();
+            $numberOfAdmin = User::all()->count() - $numberOfEmployee - $numberOfCustomer;
+            $numberOfTickets = Ticket::all()->count();
+
 
             $today_1_month_ago = today()->subMonth();
             $today_2_month_ago = today()->subMonths(2);
@@ -283,7 +295,8 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'customerNumberChart', 'ticketsNumberChart',
             'openTicketsNumberChart', 'ticketsAssignedMeChart',
-            'createdTicketsByCustomerChart', 'satisfiedTicketsByCustomerChart'
+            'createdTicketsByCustomerChart', 'satisfiedTicketsByCustomerChart',
+            'numberOfEmployee', 'numberOfCustomer', 'numberOfAdmin', 'numberOfTickets'
         ));
     }
 }

@@ -15,7 +15,7 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            'content' => $this->faker->paragraphs(4),
+            'content' => '<p>' . implode('</p><p>', $this->faker->paragraphs(4)) . '</p>',
         ];
     }
 }
