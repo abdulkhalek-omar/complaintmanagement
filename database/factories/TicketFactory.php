@@ -16,6 +16,7 @@ class TicketFactory extends Factory
     {
         return [
             'content' => '<p>' . implode('</p><p>', $this->faker->paragraphs(4)) . '</p>',
+            'created_at' => $this->faker->dateTimeBetween(now()->subMonths(3)),
         ];
     }
 }

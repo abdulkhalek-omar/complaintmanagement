@@ -35,7 +35,7 @@ class CustomerManagementFactory extends Factory
             'response' => $this->faker->sentence,
             'satisfied' => $this->faker->boolean,
             'comment' => $this->faker->sentence,
-            'assignment_at' => $currentDateTime->format('Y-m-d H:i:s'),
+            'assignment_at' => $this->faker->dateTimeBetween(now()->subMonths(3)),
             'expiry_at' => $currentDateTime->addDays(3)->format('Y-m-d H:i:s'),
             'replied_at' => $currentDateTime->addDays(9)->format('Y-m-d H:i:s'),
         ];
