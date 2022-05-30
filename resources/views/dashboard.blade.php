@@ -48,6 +48,10 @@
                 {!! $ticketsNumberChart->container() !!}
                 {!! $ticketsNumberChart->script() !!}
             </div>
+            <div>
+                {!! $satisfiedTicketsByCustomerChart->container() !!}
+                {!! $satisfiedTicketsByCustomerChart->script() !!}
+            </div>
         @else
             <div>
                 No graphics available
