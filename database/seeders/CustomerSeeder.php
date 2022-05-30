@@ -19,8 +19,8 @@ class CustomerSeeder extends Seeder
             [
                 'id' => 1,
                 'fk_user_id' => 3,
-                'surname' => 'Surname',
-                'firstname' => 'firstname',
+                'surname' => 'CustomerSurname',
+                'firstname' => 'CustomerFirst',
                 'phone_number' => '0176 4343 6841',
                 'street' => 'Mülheim an der Ruhr',
                 'fk_place_id' => 1,

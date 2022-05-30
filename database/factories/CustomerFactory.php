@@ -30,6 +30,7 @@ class CustomerFactory extends Factory
             'fk_place_id' => $this->faker->randomElement($place_ids),
             'fk_state_id' => $this->faker->randomElement($state_ids),
             'fk_country_id' => $this->faker->randomElement($country_ids),
+            'registered_at' => $this->faker->dateTimeBetween(now()->subMonths(3), 'now'),
         ];
     }
 }

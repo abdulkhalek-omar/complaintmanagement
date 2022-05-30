@@ -120,7 +120,7 @@
                                 <div class="card-body d-flex flex-column">
                                     <p class="card-text mb-4">{!! $card->ticket->content !!}</p>
                                 </div>
-                                <div class="card-footer text-muted}">
+                                <div class="card-footer text-muted">
                                     <div>{{__('Assigned to')}}
                                         : {{ $card->employee->surname }} {{ $card->employee->firstname }}</div>
                                     {{__('Assigned')}}: {{ $card->assignment_at->diffForHumans() }} <br>

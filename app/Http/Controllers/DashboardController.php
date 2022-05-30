@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * TODO:
+ * Der Controller darf keine Logik enthalten
+ * es bedarf daher, die ganze Funktionalität/Logik auszubauen aus dem DashboardController
+ * dafür sind die Klassen unter app/Charts vorgesehen
+ * dort könne man weitere Funktionen für die jeweilige Aufgabe bereitstellen
+ * und auf diese dann bsp. in diesem (DashboardController) zugreifen
+ */
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -50,14 +59,14 @@ class DashboardController extends Controller
             $numberOfTickets = Ticket::all()->count();
 
 
-            $today_1_month_ago = today()->subMonth();
-            $today_2_month_ago = today()->subMonths(2);
-            $today_3_month_ago = today()->subMonths(3);
+            $today_1_month_ago = today()->subDay()->subMonth();
+            $today_2_month_ago = today()->subDay()->subMonths(2);
+            $today_3_month_ago = today()->subDay()->subMonths(3);
 
 
             $one_month_customers = Cache::remember('one_month_customers', now()->endOfDay(), function () use ($today_1_month_ago) {
                 return Customer::
-                whereDate('registered_at', '<=', today())
+                whereDate('registered_at', '<=', today()->subDay())
                     ->whereDate('registered_at', '>=', $today_1_month_ago)
                     ->count();
             });
@@ -82,7 +91,7 @@ class DashboardController extends Controller
             $customerNumberChart = new CustomerNumberChart;
 
             $customerNumberChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_1_month_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_1_month_ago->format('d.m.Y'),
                 $today_1_month_ago->format('d.m.Y') . ' - ' . $today_2_month_ago->format('d.m.Y'),
                 $today_2_month_ago->format('d.m.Y') . ' - ' . $today_3_month_ago->format('d.m.Y')
             ]);
@@ -91,7 +100,7 @@ class DashboardController extends Controller
 
             $one_month_tickets = Cache::remember('one_month_tickets', now()->endOfDay(), function () use ($today_1_month_ago) {
                 return Ticket::
-                whereDate('created_at', '<=', today())
+                whereDate('created_at', '<=', today()->subDay())
                     ->whereDate('created_at', '>=', $today_1_month_ago)
                     ->count();
             });
@@ -115,26 +124,75 @@ class DashboardController extends Controller
             $ticketsNumberChart = new TicketNumberChart;
 
             $ticketsNumberChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_1_month_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_1_month_ago->format('d.m.Y'),
                 $today_1_month_ago->format('d.m.Y') . ' - ' . $today_2_month_ago->format('d.m.Y'),
                 $today_2_month_ago->format('d.m.Y') . ' - ' . $today_3_month_ago->format('d.m.Y')
             ]);
             $ticketsNumberChart->dataset('Growth of created Tickets', 'bar', [$one_month_tickets, $two_month_tickets, $three_month_tickets]);
+
+
+            $three_days_satisfied_tickets = Cache::remember('three_days_satisfied_tickets', now()->endOfDay(), function () use ($today_1_month_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->whereDate('assignment_at', '<=', today()->subDay())
+                    ->whereDate('assignment_at', '>=', $today_1_month_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+
+            $six_days_satisfied_tickets = Cache::remember('six_days_satisfied_tickets', now()->endOfDay(), function () use ($today_1_month_ago, $today_2_month_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->whereDate('assignment_at', '<=', $today_1_month_ago)
+                    ->whereDate('assignment_at', '>=', $today_2_month_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+
+            $nine_days_satisfied_tickets = Cache::remember('nine_days_satisfied_tickets', now()->endOfDay(), function () use ($today_2_month_ago, $today_3_month_ago) {
+                return CustomerManagement::
+                where('satisfied', 1)
+                    ->whereDate('assignment_at', '<=', $today_2_month_ago)
+                    ->whereDate('assignment_at', '>=', $today_3_month_ago)
+                    ->withTrashed()
+                    ->count();
+            });
+
+            $satisfiedTicketsByCustomerChart = new CreatedTicketsByCustomerChart;
+
+//            $dates = CustomerManagement::orderBy('assignment_at')->pluck('assignment_at')->toArray();;
+//            $dates = array_map(function ($date){
+//                return date('Y-m-d', strtotime($date));
+//            }, $dates);
+
+            $satisfiedTicketsByCustomerChart->labels([
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_1_month_ago->format('d.m.Y'),
+                $today_1_month_ago->format('d.m.Y') . ' - ' . $today_2_month_ago->format('d.m.Y'),
+                $today_2_month_ago->format('d.m.Y') . ' - ' . $today_3_month_ago->format('d.m.Y')
+            ]);
+
+            $satisfiedTicketsByCustomerChart->dataset('Growth of created Tickets', 'bar',
+                [$one_month_tickets, $two_month_tickets, $three_month_tickets]);
+            $satisfiedTicketsByCustomerChart->dataset('Ticket that customers were satisfied with in the respective time periods', 'line',
+                [$three_days_satisfied_tickets, $six_days_satisfied_tickets, $nine_days_satisfied_tickets])->backgroundColor('rgba(0,0,0, .4)');
+
         }
 
 
         if (!strcmp(session('role'), 'Employee')) {
 
-            $today_3_days_ago = today()->subDays(3);
-            $today_6_days_ago = today()->subDays(6);
-            $today_9_days_ago = today()->subDays(9);
+            $today_3_days_ago = today()->subDay()->subDays(3);
+            $today_6_days_ago = today()->subDay()->subDays(6);
+            $today_9_days_ago = today()->subDay()->subDays(9);
 
 
             $three_days_tickets = Cache::remember('three_days_tickets', now()->endOfDay(), function () use ($today_3_days_ago) {
                 return CustomerManagement::
                 where('closed', 0)
                     ->where('fk_employee_id', session('employee_id'))
-                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '<=', today()->subDay())
                     ->whereDate('assignment_at', '>=', $today_3_days_ago)
                     ->count();
             });
@@ -163,7 +221,7 @@ class DashboardController extends Controller
             $openTicketsNumberChart = new OpenTicketsNumberChart;
 
             $openTicketsNumberChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
                 $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
                 $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
             ]);
@@ -173,7 +231,7 @@ class DashboardController extends Controller
             $three_days_all_tickets = Cache::remember('three_days_all_tickets', now()->endOfDay(), function () use ($today_3_days_ago) {
                 return CustomerManagement::
                 where('fk_employee_id', session('employee_id'))
-                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '<=', today()->subDay())
                     ->whereDate('assignment_at', '>=', $today_3_days_ago)
                     ->withTrashed()
                     ->count();
@@ -201,7 +259,7 @@ class DashboardController extends Controller
             $ticketsAssignedMeChart = new TicketsAssignedMeChart;
 
             $ticketsAssignedMeChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
                 $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
                 $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
             ]);
@@ -210,14 +268,14 @@ class DashboardController extends Controller
 
         if (!strcmp(session('role'), 'User')) {
 
-            $today_3_days_ago = today()->subDays(3);
-            $today_6_days_ago = today()->subDays(6);
-            $today_9_days_ago = today()->subDays(9);
+            $today_3_days_ago = today()->subDay()->subDays(3);
+            $today_6_days_ago = today()->subDay()->subDays(6);
+            $today_9_days_ago = today()->subDay()->subDays(9);
 
             $three_days_created_tickets = Cache::remember('three_days_created_tickets', now()->endOfDay(), function () use ($today_3_days_ago) {
                 return CustomerManagement::
                 where('fk_customer_id', session('customer_id'))
-                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '<=', today()->subDay())
                     ->whereDate('assignment_at', '>=', $today_3_days_ago)
                     ->count();
             });
@@ -242,7 +300,7 @@ class DashboardController extends Controller
             $createdTicketsByCustomerChart = new CreatedTicketsByCustomerChart;
 
             $createdTicketsByCustomerChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
                 $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
                 $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
             ]);
@@ -253,7 +311,7 @@ class DashboardController extends Controller
                 return CustomerManagement::
                 where('satisfied', 1)
                     ->where('fk_customer_id', session('customer_id'))
-                    ->whereDate('assignment_at', '<=', today())
+                    ->whereDate('assignment_at', '<=', today()->subDay())
                     ->whereDate('assignment_at', '>=', $today_3_days_ago)
                     ->withTrashed()
                     ->count();
@@ -284,7 +342,7 @@ class DashboardController extends Controller
             $satisfiedTicketsByCustomerChart = new CreatedTicketsByCustomerChart;
 
             $satisfiedTicketsByCustomerChart->labels([
-                today()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
+                today()->subDay()->format('d.m.Y') . ' - ' . $today_3_days_ago->format('d.m.Y'),
                 $today_3_days_ago->format('d.m.Y') . ' - ' . $today_6_days_ago->format('d.m.Y'),
                 $today_6_days_ago->format('d.m.Y') . ' - ' . $today_9_days_ago->format('d.m.Y')
             ]);
