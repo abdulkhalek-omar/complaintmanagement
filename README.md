@@ -58,7 +58,6 @@
 - Omar Abdulkhalek
 - Moritz Dathe
 - Ümüt Yildiz
-- Noel Kaspers
 
 ### Projekt Betreuer
 
