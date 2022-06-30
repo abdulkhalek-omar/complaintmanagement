@@ -10,6 +10,21 @@
 
 > Wenn die Frist verstreicht, ohne das Ticket zu beantworten, wird dies bei dem Support-Mitarbeiter vermerkt. Wenn der Kunde mit der Antwort zufrieden ist, wird das Ticket geschlossen. Andernfalls wird das Ticket einem neuen Mitarbeiter zugeordnet und der Ablauf beginnt von Neuem.
 
+
+## Übersicht
+### Admin Dashboard
+![img.png](img.png)
+### User Management
+![img_1.png](img_1.png)
+### Ticket Management
+#### Admin Übersicht
+![img_2.png](img_2.png)
+#### Mitarbeiter Übersicht
+![img_3.png](img_3.png)
+#### User Übersicht
+![img_4.png](img_4.png)
+
+
 ## Welche Tools werden in diesem Projekt verwendet:
 
 1. Frameworks:
